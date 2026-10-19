@@ -296,17 +296,24 @@
       <fieldset class="job">
         <legend>GyozaOS</legend>
         <p>A hobby operating system for x86-64, written from scratch in C and booted by Limine. Serial and framebuffer output, GDT and TSS work.</p>
-        <div class="progress" role="progressbar" aria-label="GyozaOS progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"><span style="width: 18%"></span></div>
-        <p class="progress-caption">2 of 11 milestones done - next up: interrupts and exceptions &middot; <a href="https://github.com/Si7li/GyozaOS" target="_blank" rel="noopener">code</a></p>
+        <div class="progress" id="gyozaos-progress" role="progressbar" aria-label="GyozaOS progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"><span style="width: 18%"></span></div>
+        <p class="progress-caption"><span id="gyozaos-caption">2 of 11 milestones done - next up: IDT and exceptions</span> &middot; <a href="https://github.com/Si7li/GyozaOS" target="_blank" rel="noopener">code</a></p>
       </fieldset>
       <fieldset class="job">
         <legend>Computer Engineering Degree</legend>
         <p>Final year at Enicarthage, Tunis.</p>
-        <div class="progress" role="progressbar" aria-label="Degree progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78"><span style="width: 78%"></span></div>
-        <p class="progress-caption">78% done - expected May 2027</p>
+        <!-- Fills itself in from today's date (data-start / data-end) -->
+        <div class="progress" role="progressbar" aria-label="Degree progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78" data-start="2024-09-01" data-end="2027-05-31" data-percent-label="degree-percent"><span style="width: 78%"></span></div>
+        <p class="progress-caption"><span id="degree-percent">78</span>% done - expected May 2027</p>
       </fieldset>
-      <!-- Update this date whenever you change the list -->
-      <p class="muted">Last updated: October 2026</p>
+      <fieldset class="job">
+        <legend>Recently pushed to GitHub</legend>
+        <ul class="repo-list" id="recent-repos">
+          <li><a href="https://github.com/Si7li?tab=repositories" target="_blank" rel="noopener">See my repositories on GitHub</a></li>
+        </ul>
+      </fieldset>
+      <!-- GyozaOS progress, recent repos and this date come from data/github.json, refreshed every Monday by .github/workflows/deploy.yml -->
+      <p class="muted">Last updated: <span id="data-updated">October 19, 2026</span></p>
     </div>
   </section>
 

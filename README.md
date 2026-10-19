@@ -23,6 +23,7 @@ On phones, windows open full screen one at a time:
 - Every window has its own link, for example [`#projects`](https://si7li.github.io/Portfolio_Win98/#projects)
 - Dark theme by default, with a light theme toggle in the tray
 - Playable DOOM (shareware) in a DOS emulator, loaded only when its window opens
+- Updates itself every Monday: a GitHub Action ([`deploy.yml`](.github/workflows/deploy.yml)) refreshes my recent repos and GyozaOS progress ([`scripts/update_data.py`](scripts/update_data.py)) and redeploys the site
 - Works on phones and with the keyboard
 - Plain HTML, CSS and JavaScript: no frameworks and no build step
 

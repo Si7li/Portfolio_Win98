@@ -359,6 +359,64 @@
   tick();
   setInterval(tick, 10000);
 
+  // ---------- Live data ----------
+
+  function setProgress(bar, percent) {
+    bar.setAttribute('aria-valuenow', String(percent));
+    bar.querySelector('span').style.width = `${percent}%`;
+  }
+
+  // Progress bars with data-start / data-end (like the degree) fill themselves from today's date
+  document.querySelectorAll('.progress[data-start][data-end]').forEach(bar => {
+    const start = Date.parse(bar.dataset.start);
+    const end = Date.parse(bar.dataset.end);
+    const percent = Math.round(Math.min(1, Math.max(0, (Date.now() - start) / (end - start))) * 100);
+    setProgress(bar, percent);
+    const label = document.getElementById(bar.dataset.percentLabel);
+    if (label) label.textContent = percent;
+  });
+
+  const formatDate = (iso, month) => new Date(`${iso}T00:00:00`).toLocaleDateString('en', { year: 'numeric', month, day: 'numeric' });
+
+  function showRepos(repos) {
+    const list = document.getElementById('recent-repos');
+    list.replaceChildren(...repos.map(repo => {
+      const item = document.createElement('li');
+      const link = document.createElement('a');
+      link.href = repo.url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.textContent = repo.name;
+      const meta = document.createElement('span');
+      meta.className = 'repo-meta';
+      meta.textContent = ` · ${[repo.language, formatDate(repo.pushed, 'short')].filter(Boolean).join(' · ')}`;
+      item.append(link, meta);
+      if (repo.description) {
+        const desc = document.createElement('span');
+        desc.className = 'repo-desc';
+        desc.textContent = repo.description;
+        item.append(desc);
+      }
+      return item;
+    }));
+  }
+
+  // data/github.json is refreshed every Monday by .github/workflows/deploy.yml.
+  // If it can't load (e.g. the page was opened from disk), the text already in the page stays.
+  fetch('data/github.json')
+    .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+    .then(data => {
+      if (data.gyozaos) {
+        const { done, total, next } = data.gyozaos;
+        setProgress(document.getElementById('gyozaos-progress'), Math.round((done / total) * 100));
+        document.getElementById('gyozaos-caption').textContent =
+          `${done} of ${total} milestones done` + (next ? ` - next up: ${next.title}` : ' - all milestones done!');
+      }
+      if (data.repos?.length) showRepos(data.repos);
+      if (data.updated) document.getElementById('data-updated').textContent = formatDate(data.updated, 'long');
+    })
+    .catch(() => { /* keep the built-in text */ });
+
   // ---------- Welcome screen preference ----------
 
   const showWelcome = document.getElementById('show-welcome');

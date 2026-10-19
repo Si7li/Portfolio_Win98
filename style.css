@@ -333,6 +333,11 @@ legend { padding: 0 3px; font-weight: bold; }
 
 .job ul { margin-bottom: 6px; }
 
+.repo-list { margin: 0 0 4px !important; padding: 0 !important; list-style: none; }
+.repo-list li { margin-bottom: 6px; }
+.repo-list .repo-meta { color: var(--muted); font-size: 12px; }
+.repo-list .repo-desc { display: block; font-size: 12px; }
+
 .contact-table { border-collapse: collapse; margin-bottom: 4px; }
 .contact-table th { padding: 3px 12px 3px 0; text-align: left; font-weight: normal; }
 .contact-table td { padding: 3px 0; }

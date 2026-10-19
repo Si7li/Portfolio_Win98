@@ -1,0 +1,55 @@
+{
+  "updated": "2026-10-19",
+  "repos": [
+    {
+      "name": "microProcesseur_fpga",
+      "url": "https://github.com/Si7li/microProcesseur_fpga",
+      "description": "",
+      "language": "VHDL",
+      "pushed": "2026-10-13"
+    },
+    {
+      "name": "MNIST-Neural-Network-On-FPGA",
+      "url": "https://github.com/Si7li/MNIST-Neural-Network-On-FPGA",
+      "description": "",
+      "language": "VHDL",
+      "pushed": "2026-10-13"
+    },
+    {
+      "name": "GyozaOS",
+      "url": "https://github.com/Si7li/GyozaOS",
+      "description": "",
+      "language": "C",
+      "pushed": "2026-09-09"
+    },
+    {
+      "name": "stm32-rm",
+      "url": "https://github.com/Si7li/stm32-rm",
+      "description": "",
+      "language": "Python",
+      "pushed": "2026-08-31"
+    },
+    {
+      "name": "aur-pkgbuild-check",
+      "url": "https://github.com/Si7li/aur-pkgbuild-check",
+      "description": "AUR PKGBUILD malware checker for Arch Linux",
+      "language": "Shell",
+      "pushed": "2026-06-14"
+    },
+    {
+      "name": "netlist-simulator",
+      "url": "https://github.com/Si7li/netlist-simulator",
+      "description": "",
+      "language": "Python",
+      "pushed": "2026-01-27"
+    }
+  ],
+  "gyozaos": {
+    "done": 2,
+    "total": 11,
+    "next": {
+      "title": "IDT and exceptions",
+      "state": "in progress"
+    }
+  }
+}
