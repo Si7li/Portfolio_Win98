@@ -21,6 +21,8 @@ On phones, windows open full screen one at a time:
 
 - Draggable windows with minimize, maximize and close, a taskbar, a Start menu and a clock
 - Every window has its own link, for example [`#projects`](https://si7li.github.io/Portfolio_Win98/#projects)
+- A working Explorer: type a path like `C:\Desktop\My Projects` in the address bar, go Back / Forward / Up, and use real File, Edit, View and Help menus (keyboard too: Alt+letter, arrows, Esc)
+- Notepad menus that work: Save As downloads the text, Copy, Select All, Word Wrap, Find / Find Next
 - Dark theme by default, with a light theme toggle in the tray
 - Playable DOOM (shareware) in a DOS emulator, loaded only when its window opens
 - Stays up to date on its own: my recent repos, GyozaOS progress and degree progress are read live from GitHub and today's date, with [`data/github.json`](data/github.json) as a fallback ([`scripts/update_data.py`](scripts/update_data.py) refreshes it)

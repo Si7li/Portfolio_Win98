@@ -71,8 +71,7 @@
   </section>
 
   <!-- ============ ABOUT ME (Notepad) ============ -->
-  <section class="window" id="about" data-title="About Me.txt - Notepad" data-icon="icons/notepad-16.png" data-width="560" hidden>
-    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>S</u>earch</span><span><u>H</u>elp</span></div>
+  <section class="window" id="about" data-title="About Me.txt - Notepad" data-icon="icons/notepad-16.png" data-app="notepad" data-width="560" hidden>
     <div class="window-body notepad sunken">
       <h2>Hi, I'm Khalil</h2>
       <p>I'm Khalil Sahli, a computer engineering student at the National Engineering School of Carthage (Enicarthage) in Tunis, graduating in May 2027. I work as an AI engineer: generative AI, LLM agents and edge AI.</p>
@@ -103,9 +102,9 @@
   </section>
 
   <!-- ============ MY PROJECTS (Explorer) ============ -->
-  <section class="window" id="projects" data-title="My Projects" data-icon="icons/folder-16.png" data-width="580" hidden>
-    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
-    <div class="address-bar"><span>Address</span><div class="field">C:\My Documents\Projects</div></div>
+  <!-- Folder windows have a data-path on the little C: drive (see "Explorer" in script.js).
+       Their icons below are the folder's contents; the menus, toolbar and address bar are added by script.js. -->
+  <section class="window" id="projects" data-title="My Projects" data-icon="icons/folder-16.png" data-icon-large="icons/folder.png" data-path="C:\Desktop\My Projects" data-width="580" hidden>
     <div class="window-body explorer-view sunken">
       <!-- One icon per project. data-open must match the project window's id below. data-status shows in the status bar when selected. -->
       <button type="button" class="icon" data-open="ticketpilot" data-status="TicketPilot: AI agent with RAG and tool calling"><img src="icons/program.png" alt=""><span>TicketPilot</span></button>
@@ -125,7 +124,7 @@
       <a class="icon" href="https://github.com/Si7li/Chess-Predictor-CNN" target="_blank" rel="noopener" data-status="CNNs that predict the best chess move from a board position (FEN)"><img src="icons/program.png" alt=""><span>Chess Predictor CNN</span></a>
       <a class="icon" href="https://github.com/Si7li/BasketballAnalysis" target="_blank" rel="noopener" data-status="Basketball analysis AI model"><img src="icons/program.png" alt=""><span>Basketball Analysis</span></a>
     </div>
-    <div class="status-bar"><p>15 object(s)</p><p>Double-click a project to open it</p></div>
+    <div class="status-bar"><p>15 object(s)</p><p>Double-click an item to open it</p></div>
   </section>
 
   <!-- ============ PROJECT WINDOWS ============ -->
@@ -411,8 +410,7 @@
   </section>
 
   <!-- ============ RECYCLE BIN ============ -->
-  <section class="window" id="recycle" data-title="Recycle Bin" data-icon="icons/recycle-empty-16.png" data-width="500" hidden>
-    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+  <section class="window" id="recycle" data-title="Recycle Bin" data-icon="icons/recycle-empty-16.png" data-icon-large="icons/recycle-empty.png" data-path="C:\Desktop\Recycle Bin" data-empty-text="The Recycle Bin is empty" data-width="500" hidden>
     <div class="window-body explorer-view sunken">
     </div>
     <div class="status-bar"><p>0 object(s)</p><p>The Recycle Bin is empty</p></div>
@@ -423,6 +421,29 @@
   <section class="window" id="doom" data-title="DOOM" data-icon="icons/doom-16.png" data-width="660" hidden>
     <div class="window-body doom-body">
       <iframe data-src="doom/index.html" title="DOOM (shareware)" allow="fullscreen; autoplay; gamepad"></iframe>
+    </div>
+  </section>
+
+  <!-- ============ MESSAGE BOX (address bar errors, Find results) ============ -->
+  <section class="window dialog" id="msgbox" data-title="Error" data-width="400" hidden>
+    <div class="window-body">
+      <div class="msgbox"><img id="msgbox-icon" src="icons/error.png" alt="" width="32" height="32"><p id="msgbox-text"></p></div>
+      <div class="button-row center"><button type="button" class="button" data-close>OK</button></div>
+    </div>
+  </section>
+
+  <!-- ============ FIND (Notepad's Search menu) ============ -->
+  <section class="window dialog" id="find" data-title="Find" data-width="380" hidden>
+    <div class="window-body find-body">
+      <div class="find-fields">
+        <label for="find-text">Fi<u>n</u>d what:</label>
+        <input type="text" id="find-text" class="field-input" autocomplete="off" spellcheck="false">
+        <label class="checkbox"><input type="checkbox" id="find-case"> Match <u>c</u>ase</label>
+      </div>
+      <div class="find-buttons">
+        <button type="button" class="button" id="find-next">Find Next</button>
+        <button type="button" class="button" data-close>Cancel</button>
+      </div>
     </div>
   </section>
 
@@ -480,6 +501,9 @@
   <p>It's now safe to turn off<br>your computer.</p>
   <small>Click anywhere or press a key to restart</small>
 </div>
+
+<!-- Suggestions for the explorer address bars, filled in by script.js -->
+<datalist id="explorer-paths"></datalist>
 
 <script src="script.js"></script>
 </body>
