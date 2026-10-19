@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>DOOM (shareware)</title>
+  <link rel="stylesheet" href="js-dos/js-dos.css">
+  <style>
+    html, body { height: 100%; margin: 0; background: #000; overflow: hidden; }
+    #dos { width: 100%; height: 100%; }
+    .splash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: 100%;
+      padding: 16px;
+      border: 0;
+      background: #000;
+      color: #aaa;
+      font: 14px/1.5 "Lucida Console", "Courier New", monospace;
+      text-align: center;
+      cursor: pointer;
+    }
+    .splash:focus-visible { outline: 1px dotted #aaa; outline-offset: -8px; }
+    .logo { color: #c00; font: bold clamp(40px, 12vw, 72px)/1 Impact, "Arial Black", sans-serif; letter-spacing: 6px; text-shadow: 3px 3px #400; }
+    .keys { display: grid; grid-template-columns: auto auto; gap: 2px 16px; text-align: left; }
+    .keys b { color: #fff; font-weight: normal; }
+    .start { color: #fff; animation: blink 1s steps(1) infinite; }
+    .note { color: #666; font-size: 12px; }
+    @keyframes blink { 50% { visibility: hidden; } }
+    @media (prefers-reduced-motion: reduce) { .start { animation: none; } }
+  </style>
+</head>
+<body>
+  <button type="button" class="splash" id="splash">
+    <span class="logo">DOOM</span>
+    <span>Shareware v1.9 &middot; Episode 1: Knee-Deep in the Dead</span>
+    <span class="keys">
+      <b>Arrow keys</b><span>move / turn</span>
+      <b>Ctrl</b><span>fire</span>
+      <b>Space</b><span>open doors, flip switches</span>
+      <b>Shift</b><span>run</span>
+      <b>1 - 7</b><span>switch weapon</span>
+      <b>Esc</b><span>menu</span>
+    </span>
+    <span class="start">Click or press any key to start</span>
+    <span class="note">Needs a keyboard. Downloads about 7 MB the first time.</span>
+  </button>
+  <div id="dos" hidden></div>
+
+  <script src="js-dos/js-dos.js"></script>
+  <script>
+    // Starts js-dos with the self-hosted emulator files and the DOOM shareware bundle.
+    (() => {
+      const splash = document.getElementById('splash');
+      const screen = document.getElementById('dos');
+      let dos = null;
+
+      // js-dos asks for a keyboard lock, which browsers only allow in a top-level page.
+      // Inside the portfolio's iframe that call throws, so turn it into a no-op.
+      if (window.top !== window && navigator.keyboard?.lock) navigator.keyboard.lock = () => Promise.resolve();
+
+      // Browsers block the emulator from loading files when the page is opened straight from disk
+      if (location.protocol === 'file:') {
+        splash.querySelector('.start').textContent = "DOOM can't run from a file opened on disk.";
+        splash.querySelector('.note').textContent = 'It works once the site is online, or through a local server: python3 -m http.server, then open http://localhost:8000';
+        splash.querySelector('.start').style.animation = 'none';
+        splash.disabled = true;
+        splash.style.cursor = 'default';
+        return;
+      }
+
+      function start() {
+        if (dos) return;
+        splash.hidden = true;
+        screen.hidden = false;
+        dos = Dos(screen, {
+          url: new URL('doom.jsdos', location.href).href,
+          pathPrefix: new URL('js-dos/emulators/', location.href).href,
+          autoStart: true,
+          kiosk: true,
+          theme: 'dark',
+          renderAspect: '4/3',
+          volume: 0.6,
+        });
+      }
+
+      splash.addEventListener('click', start);
+      document.addEventListener('keydown', e => {
+        if (dos) return;
+        e.preventDefault();
+        start();
+      });
+
+      // The portfolio pauses the game while its window is minimized
+      window.addEventListener('message', e => {
+        if (e.source !== window.parent || !dos) return;
+        if (e.data === 'pause') dos.setPaused?.(true);
+        if (e.data === 'resume') dos.setPaused?.(false);
+      });
+    })();
+  </script>
+</body>
+</html>

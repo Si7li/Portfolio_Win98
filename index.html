@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- EDIT: put your name in the title and description -->
+  <title>[Your Name] - Portfolio 98</title>
+  <meta name="description" content="[Your Name]'s portfolio: projects, career, studies and what I'm building right now.">
+  <link rel="icon" href="icons/windows-16.png" type="image/png">
+  <link rel="stylesheet" href="style.css">
+  <script>
+    // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
+    try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
+  </script>
+  <noscript>
+    <style>
+      .window[hidden] { display: flex !important; position: static !important; width: auto !important; max-width: 640px; margin: 16px auto; }
+      .window::before { content: attr(data-title); display: block; padding: 3px 6px; color: #fff; font-weight: bold; background: linear-gradient(90deg, #000080, #1084d0); }
+      #desktop { position: static; overflow: visible; }
+      .taskbar { display: none; }
+    </style>
+  </noscript>
+</head>
+<body>
+
+<!--
+  HOW THIS PAGE WORKS
+  - Every <section class="window"> is one window. Its id is its link: yourname.github.io/#about opens "About Me".
+  - data-title = the text in the title bar, data-icon = its icon, data-width = how wide it opens (px).
+  - Anything with data-open="some-id" opens that window when clicked.
+  - Search for "EDIT" to find everything you should replace.
+-->
+
+<main id="desktop">
+
+  <!-- Desktop icons (double-click to open, single tap on phones) -->
+  <nav class="desktop-icons" aria-label="Desktop">
+    <button type="button" class="icon" data-open="about"><img src="icons/notepad-file.png" alt=""><span>About Me</span></button>
+    <button type="button" class="icon" data-open="projects"><img src="icons/folder.png" alt=""><span>My Projects</span></button>
+    <button type="button" class="icon" data-open="ongoing"><img src="icons/hourglass.png" alt=""><span>In Progress</span></button>
+    <button type="button" class="icon" data-open="career"><img src="icons/briefcase.png" alt=""><span>Career</span></button>
+    <button type="button" class="icon" data-open="studies"><img src="icons/certificate.png" alt=""><span>Studies</span></button>
+    <!-- EDIT: upload your resume as resume.pdf next to index.html -->
+    <a class="icon" href="resume.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt=""><span>Resume.pdf</span></a>
+    <button type="button" class="icon" data-open="contact"><img src="icons/mail.png" alt=""><span>Contact</span></button>
+    <button type="button" class="icon" data-open="doom"><img src="icons/doom.png" alt=""><span>DOOM</span></button>
+    <button type="button" class="icon" data-open="recycle"><img src="icons/recycle-full.png" alt=""><span>Recycle Bin</span></button>
+  </nav>
+
+  <!-- ============ WELCOME ============ -->
+  <section class="window dialog" id="welcome" data-title="Welcome" data-icon="icons/computer-16.png" data-width="540" hidden>
+    <div class="window-body welcome">
+      <h1 class="welcome-heading">Welcome to <b>[Your Name]</b>'s portfolio</h1>
+      <div class="welcome-columns">
+        <div class="welcome-links">
+          <button type="button" class="button" data-open="about">Who am I?</button>
+          <button type="button" class="button" data-open="projects">My Projects</button>
+          <button type="button" class="button" data-open="ongoing">In Progress</button>
+          <button type="button" class="button" data-open="career">Career</button>
+          <button type="button" class="button" data-open="studies">Studies</button>
+          <button type="button" class="button" data-open="contact">Contact</button>
+        </div>
+        <div class="welcome-text sunken">
+          <!-- EDIT: a short intro, 2-3 sentences -->
+          <p><b>Hi! I'm [Your Name]</b>, a [student / developer / designer] based in [City].</p>
+          <p>I build [the kind of things you build]. This site is where I keep my projects, my resume and whatever I'm working on right now.</p>
+          <p>Double-click an icon on the desktop or use the buttons on the left to look around.</p>
+        </div>
+      </div>
+      <div class="welcome-footer">
+        <label class="checkbox"><input type="checkbox" id="show-welcome" checked> Show this screen when the site opens</label>
+        <button type="button" class="button" data-close>Close</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT ME (Notepad) ============ -->
+  <section class="window" id="about" data-title="About Me.txt - Notepad" data-icon="icons/notepad-16.png" data-width="540" hidden>
+    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>S</u>earch</span><span><u>H</u>elp</span></div>
+    <div class="window-body notepad sunken">
+      <!-- EDIT: who you are -->
+      <h2>Hi, I'm [Your Name]</h2>
+      <p>[One or two sentences on who you are and what you do. Example: I'm a computer science student who likes building tools that make everyday things a bit easier.]</p>
+
+      <h2>A bit about me</h2>
+      <p>[Where you're from, how you got into this, what you care about.]</p>
+
+      <h2>What I'm good at</h2>
+      <ul>
+        <li>[Language / framework] - [how you've used it]</li>
+        <li>[Language / framework] - [how you've used it]</li>
+        <li>[Tool / skill] - [how you've used it]</li>
+      </ul>
+
+      <h2>Outside of code</h2>
+      <p>[Hobbies, games, music, sports... the stuff that makes you a person.]</p>
+
+      <p>-- EOF --</p>
+    </div>
+  </section>
+
+  <!-- ============ MY PROJECTS (Explorer) ============ -->
+  <section class="window" id="projects" data-title="My Projects" data-icon="icons/folder-16.png" data-width="560" hidden>
+    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+    <div class="address-bar"><span>Address</span><div class="field">C:\My Documents\Projects</div></div>
+    <div class="window-body explorer-view sunken">
+      <!-- EDIT: one icon per project. data-open must match the project window's id below. data-status shows in the status bar when selected. -->
+      <button type="button" class="icon" data-open="project-one" data-status="[Project One]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project One]</span></button>
+      <button type="button" class="icon" data-open="project-two" data-status="[Project Two]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project Two]</span></button>
+      <button type="button" class="icon" data-open="project-three" data-status="[Project Three]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project Three]</span></button>
+    </div>
+    <div class="status-bar"><p>3 object(s)</p><p>Double-click a project to open it</p></div>
+  </section>
+
+  <!-- ============ PROJECT WINDOWS ============ -->
+  <!-- EDIT: copy one of these blocks for each project. Keep the id in sync with the icon above. -->
+  <section class="window" id="project-one" data-title="[Project One]" data-icon="icons/program-16.png" data-width="520" hidden>
+    <div class="window-body">
+      <!-- Swap the placeholder div for: <img class="screenshot" src="images/project-one.png" alt="Screenshot of Project One"> -->
+      <div class="screenshot placeholder sunken">screenshot.png</div>
+      <h2>[Project One]</h2>
+      <p>[What it is, in one or two sentences.]</p>
+      <p>[Why you built it, what was hard, what you learned. Numbers help: "used by 40 classmates", "cut load time by 60%".]</p>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>[HTML]</li><li>[CSS]</li><li>[JavaScript]</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
+        <a class="button" href="#" target="_blank" rel="noopener">Live demo</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="window" id="project-two" data-title="[Project Two]" data-icon="icons/program-16.png" data-width="520" hidden>
+    <div class="window-body">
+      <div class="screenshot placeholder sunken">screenshot.png</div>
+      <h2>[Project Two]</h2>
+      <p>[What it is, in one or two sentences.]</p>
+      <p>[Why you built it, what was hard, what you learned.]</p>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>[Python]</li><li>[Flask]</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="window" id="project-three" data-title="[Project Three]" data-icon="icons/program-16.png" data-width="520" hidden>
+    <div class="window-body">
+      <div class="screenshot placeholder sunken">screenshot.png</div>
+      <h2>[Project Three]</h2>
+      <p>[What it is, in one or two sentences.]</p>
+      <p>[Why you built it, what was hard, what you learned.]</p>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>[C++]</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IN PROGRESS (copy dialog) ============ -->
+  <section class="window" id="ongoing" data-title="Copying... In Progress" data-icon="icons/hourglass-16.png" data-width="460" hidden>
+    <div class="window-body">
+      <p class="muted">Things I'm building right now. Progress bars are honest estimates.</p>
+      <!-- EDIT: one fieldset per ongoing project. Change both the width % and aria-valuenow. -->
+      <fieldset class="job">
+        <legend>[Ongoing Project A]</legend>
+        <p>[What it is and what you're working on this week.]</p>
+        <div class="progress" role="progressbar" aria-label="[Ongoing Project A] progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65"><span style="width: 65%"></span></div>
+        <p class="progress-caption">65% done - next up: [the next milestone]</p>
+      </fieldset>
+      <fieldset class="job">
+        <legend>[Ongoing Project B]</legend>
+        <p>[What it is and what you're working on this week.]</p>
+        <div class="progress" role="progressbar" aria-label="[Ongoing Project B] progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><span style="width: 20%"></span></div>
+        <p class="progress-caption">20% done - next up: [the next milestone]</p>
+      </fieldset>
+      <!-- EDIT: update this date whenever you change the list -->
+      <p class="muted">Last updated: [Month Year]</p>
+    </div>
+  </section>
+
+  <!-- ============ CAREER ============ -->
+  <section class="window" id="career" data-title="Career" data-icon="icons/briefcase-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <!-- EDIT: one fieldset per job / internship / freelance gig, newest first -->
+      <fieldset class="job">
+        <legend>[Job Title] - [Company]</legend>
+        <p class="muted">[Start Month Year] - [End Month Year or Present] &middot; [City / Remote]</p>
+        <ul>
+          <li>[What you did, starting with a verb: Built, Led, Improved...]</li>
+          <li>[A result you're proud of]</li>
+        </ul>
+      </fieldset>
+      <fieldset class="job">
+        <legend>[Job Title] - [Company]</legend>
+        <p class="muted">[Start Month Year] - [End Month Year] &middot; [City / Remote]</p>
+        <ul>
+          <li>[What you did]</li>
+          <li>[A result you're proud of]</li>
+        </ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="resume.pdf" target="_blank" rel="noopener">Open full resume</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STUDIES (tabbed dialog) ============ -->
+  <section class="window" id="studies" data-title="Studies Properties" data-icon="icons/certificate-16.png" data-width="500" hidden>
+    <div class="window-body">
+      <div class="tabs" role="tablist" aria-label="Studies">
+        <button type="button" class="tab" role="tab" id="tab-education" aria-controls="panel-education" aria-selected="true">Education</button>
+        <button type="button" class="tab" role="tab" id="tab-certs" aria-controls="panel-certs" aria-selected="false" tabindex="-1">Certifications</button>
+        <button type="button" class="tab" role="tab" id="tab-courses" aria-controls="panel-courses" aria-selected="false" tabindex="-1">Courses &amp; Clubs</button>
+      </div>
+      <!-- EDIT: your studies -->
+      <div class="tab-panel" role="tabpanel" id="panel-education" aria-labelledby="tab-education">
+        <fieldset class="job">
+          <legend>[Degree, e.g. B.Sc. Computer Science]</legend>
+          <p><b>[School / University]</b>, [City]</p>
+          <p class="muted">[Start Year] - [End Year or Expected Year]</p>
+          <p>[Focus areas, notable coursework, GPA or honors if you want to share them.]</p>
+        </fieldset>
+        <fieldset class="job">
+          <legend>[Previous diploma]</legend>
+          <p><b>[School]</b>, [City]</p>
+          <p class="muted">[Year]</p>
+        </fieldset>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-certs" aria-labelledby="tab-certs" hidden>
+        <ul>
+          <li><b>[Certification name]</b> - [Issuer], [Year]</li>
+          <li><b>[Certification name]</b> - [Issuer], [Year]</li>
+        </ul>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-courses" aria-labelledby="tab-courses" hidden>
+        <ul>
+          <li>[Online course, bootcamp, hackathon or club] - [what you got out of it]</li>
+          <li>[Another one]</li>
+        </ul>
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" data-close>OK</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="window" id="contact" data-title="Contact" data-icon="icons/mail-16.png" data-width="400" hidden>
+    <div class="window-body">
+      <p>Want to work together, or just say hi? Reach me here:</p>
+      <!-- EDIT: your links -->
+      <table class="contact-table">
+        <tr><th>E-mail:</th><td><a href="mailto:you@example.com">you@example.com</a></td></tr>
+        <tr><th>GitHub:</th><td><a href="https://github.com/" target="_blank" rel="noopener">github.com/[username]</a></td></tr>
+        <tr><th>LinkedIn:</th><td><a href="https://www.linkedin.com/" target="_blank" rel="noopener">linkedin.com/in/[username]</a></td></tr>
+      </table>
+      <div class="button-row right">
+        <a class="button" href="mailto:you@example.com">Send e-mail</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RECYCLE BIN ============ -->
+  <section class="window" id="recycle" data-title="Recycle Bin" data-icon="icons/recycle-full-16.png" data-width="440" hidden>
+    <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
+    <div class="window-body explorer-view sunken">
+      <!-- EDIT: old or abandoned projects, or jokes -->
+      <button type="button" class="icon" data-status="My very first website. We don't talk about it."><img src="icons/html.png" alt=""><span>first_site_v1.html</span></button>
+      <button type="button" class="icon" data-status="A game idea that was 10% code and 90% dreams."><img src="icons/program.png" alt=""><span>game_idea_FINAL_2.exe</span></button>
+    </div>
+    <div class="status-bar"><p>2 object(s)</p><p>Click an item to see what it was</p></div>
+  </section>
+
+  <!-- ============ DOOM ============ -->
+  <!-- The DOOM shareware running in a DOS emulator (see doom/README.txt). Nothing loads until this window opens. -->
+  <section class="window" id="doom" data-title="DOOM" data-icon="icons/doom-16.png" data-width="660" hidden>
+    <div class="window-body doom-body">
+      <iframe data-src="doom/index.html" title="DOOM (shareware)" allow="fullscreen; autoplay; gamepad"></iframe>
+    </div>
+  </section>
+
+  <!-- ============ ABOUT THIS SITE ============ -->
+  <section class="window dialog" id="about-site" data-title="System Properties" data-icon="icons/info-16.png" data-width="380" hidden>
+    <div class="window-body">
+      <div class="about-site">
+        <img src="icons/computer.png" alt="" width="64" height="64">
+        <div>
+          <p><b>Portfolio 98</b></p>
+          <p>Hosted on GitHub Pages.<br>Built with plain HTML, CSS and JavaScript.<br>No frameworks were harmed.</p>
+          <!-- EDIT -->
+          <p class="muted">Registered to: [Your Name]</p>
+        </div>
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" data-close>OK</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============ START MENU ============ -->
+<div class="start-menu" id="start-menu" hidden>
+  <div class="start-banner" aria-hidden="true"><span><b>Portfolio</b>98</span></div>
+  <ul>
+    <li><button type="button" data-open="projects"><img src="icons/folder.png" alt="">My Projects</button></li>
+    <li><button type="button" data-open="ongoing"><img src="icons/hourglass.png" alt="">In Progress</button></li>
+    <li><button type="button" data-open="about"><img src="icons/notepad-file.png" alt="">About Me</button></li>
+    <li><button type="button" data-open="career"><img src="icons/briefcase.png" alt="">Career</button></li>
+    <li><button type="button" data-open="studies"><img src="icons/certificate.png" alt="">Studies</button></li>
+    <li><a href="resume.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt="">Resume.pdf</a></li>
+    <li><button type="button" data-open="contact"><img src="icons/mail.png" alt="">Contact</button></li>
+    <li><button type="button" data-open="doom"><img src="icons/doom.png" alt="">DOOM</button></li>
+    <li class="separator" role="separator"></li>
+    <li><button type="button" data-action="theme"><img src="icons/moon.png" alt=""><span id="theme-menu-label">Light Mode</span></button></li>
+    <li><button type="button" data-open="about-site"><img src="icons/info.png" alt="">About this site</button></li>
+    <li><button type="button" data-action="shutdown"><img src="icons/shutdown.png" alt="">Shut Down...</button></li>
+  </ul>
+</div>
+
+<!-- ============ TASKBAR ============ -->
+<footer class="taskbar">
+  <button type="button" class="start-button" id="start-button" aria-haspopup="true" aria-expanded="false" aria-controls="start-menu">
+    <img src="icons/windows-16.png" alt="">Start
+  </button>
+  <div class="task-list" id="task-list"></div>
+  <div class="tray">
+    <button type="button" class="tray-button" id="theme-toggle" data-action="theme" aria-pressed="true" aria-label="Dark mode" title="Dark mode"><img src="icons/moon-16.png" alt=""></button>
+    <span id="clock"></span>
+  </div>
+</footer>
+
+<div class="shutdown-screen" id="shutdown-screen" tabindex="-1" hidden>
+  <p>It's now safe to turn off<br>your computer.</p>
+  <small>Click anywhere or press a key to restart</small>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
