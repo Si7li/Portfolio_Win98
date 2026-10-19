@@ -10,7 +10,8 @@
   const shutdownScreen = document.getElementById('shutdown-screen');
   const smallScreen = matchMedia('(max-width: 700px)');
 
-  const windows = new Map(); // id -> { el, task, placed, explorer? }
+  const windows = new Map(); // id -> { el, task, placed, explorer?, notepad?, paint? }
+  const onOpen = {}; // id -> function to run each time that window opens
   let topZ = 10;
   let cascade = 0;
 
@@ -106,6 +107,7 @@
     }
     // Opening a folder window from the desktop or Start menu always shows its own folder
     if (win.explorer && win.explorer.path !== win.explorer.home) navigate(win, win.explorer.home);
+    onOpen[id]?.();
     restoreWindow(win);
     // Dialogs (welcome, about this site) don't get their own link
     if (!win.el.classList.contains('dialog')) setHash(id);
@@ -127,6 +129,7 @@
     setFrames(win, false);
     win.task?.remove();
     win.task = null;
+    win.paint?.newImage(); // closing Paint throws the picture away
     if (location.hash === `#${id}`) setHash('');
     focusTopmost();
   }
@@ -258,14 +261,24 @@
   const winOf = node => windows.get(node.closest?.('.window')?.id);
 
   function activateIcon(icon, explorerWin = winOf(icon)) {
+    if (icon.dataset.drive) return driveNotReady(icon.dataset.drive);
     if (explorerWin?.explorer) {
       // Inside an explorer window, folders open in place
       const folderWin = icon.dataset.open && windows.get(icon.dataset.open);
       const path = icon.dataset.goto || folderWin?.explorer?.home;
       if (path) return navigate(explorerWin, path);
     }
-    if (icon.dataset.open) openWindow(icon.dataset.open);
+    if (icon.dataset.open) openFrom(icon);
     else if (icon.href) window.open(icon.href, '_blank', 'noopener');
+  }
+
+  // Opens the window an icon, button or link points at. Paint openers can also name a picture
+  // (data-paint-file) or ask for a blank one (data-paint-new).
+  function openFrom(el) {
+    openWindow(el.dataset.open);
+    const paint = windows.get(el.dataset.open)?.paint;
+    if (paint && el.dataset.paintFile) paint.load(el.dataset.paintFile, el.dataset.paintName || el.dataset.paintFile.split('/').pop());
+    else if (paint && 'paintNew' in el.dataset) paint.newImage();
   }
 
   function clearSelection(container) {
@@ -311,16 +324,26 @@
     }
   });
 
-  // ---------- Explorer: a tiny C: drive ----------
-  // C:\ holds Desktop, which shows the desktop icons. Windows with a data-path (My Projects, Recycle Bin)
-  // are folders inside it, and their contents are the icons written in their HTML.
+  // ---------- Explorer: My Computer and a tiny C: drive ----------
+  // My Computer holds the drives and Control Panel. C:\ holds Desktop, which shows the desktop icons.
+  // Windows with a data-path (My Computer, My Projects, Recycle Bin, Control Panel) are folders,
+  // and their contents are the icons written in their HTML.
 
-  const folders = new Map(); // lowercase path -> { path, title, icon, items }
+  const folders = new Map(); // lowercase path -> { path, title, icon, items, parent }
   const ROOT = 'C:\\';
+  const NOT_READY = ['A', 'D']; // the floppy and CD drives never have a disk in them
 
-  // "c:/desktop/my projects/" -> "C:\Desktop\My Projects" (paths without a drive are taken from C:\)
+  function driveNotReady(letter) {
+    letter = letter.replace(/[:\\]/g, '').toUpperCase();
+    showMessage(`${letter}:\\`, `${letter}:\\ is not accessible.\n\nThe device is not ready.`);
+  }
+
+  // "c:/desktop/my projects/" -> "C:\Desktop\My Projects". Names like "my computer" give that place;
+  // other paths without a drive are taken from C:\
   function normalizePath(input) {
     let path = input.trim().replace(/\//g, '\\').replace(/\\+/g, '\\');
+    const named = folders.get(path.replace(/\\$/, '').toLowerCase());
+    if (named && !/^[a-z]:/i.test(path)) return named.path;
     if (!/^[a-z]:/i.test(path)) path = ROOT + path.replace(/^\\/, '');
     path = path[0].toUpperCase() + path.slice(1);
     if (path.length === 2) path += '\\';
@@ -328,11 +351,17 @@
   }
 
   const folderAt = path => folders.get(normalizePath(path).toLowerCase());
-  const parentOf = path => (path === ROOT ? null : normalizePath(path.slice(0, path.lastIndexOf('\\'))));
+  // The folder one level up, or null at the top (My Computer)
+  function parentOf(path) {
+    const folder = folderAt(path);
+    if (folder && folder.parent !== undefined) return folder.parent;
+    if (/^[a-z]:\\$/i.test(path)) return null;
+    return normalizePath(path.slice(0, path.lastIndexOf('\\')));
+  }
   const childPath = (folder, name) => (folder === ROOT ? ROOT + name : `${folder}\\${name}`);
 
-  function addFolder(path, title, icon, items) {
-    folders.set(path.toLowerCase(), { path, title, icon, items });
+  function addFolder(path, title, icon, items, parent) {
+    folders.set(path.toLowerCase(), { path, title, icon, items, parent });
   }
 
   function makeFolderIcon(name, path) {
@@ -353,7 +382,7 @@
       paths.push(folder.path);
       folder.items.forEach(item => {
         const isFolder = item.dataset.goto || windows.get(item.dataset.open)?.explorer;
-        if (!isFolder) paths.push(childPath(folder.path, iconName(item)));
+        if (!isFolder && !item.dataset.drive && /^[A-Z]:/.test(folder.path)) paths.push(childPath(folder.path, iconName(item)));
       });
     });
     list.replaceChildren(...paths.map(path => Object.assign(document.createElement('option'), { value: path })));
@@ -393,7 +422,7 @@
     el.querySelector('.title-bar').after(buildMenuBar(win, explorerMenus(win)), toolbar, addressBar);
 
     win.explorer = {
-      home: normalizePath(el.dataset.path),
+      home: /^[a-z]:/i.test(el.dataset.path) ? normalizePath(el.dataset.path) : el.dataset.path,
       path: null,
       history: [],
       index: -1,
@@ -402,7 +431,9 @@
       toolbar,
       statusBar: el.querySelector('.status-bar'),
     };
-    addFolder(win.explorer.home, el.dataset.title, el.dataset.icon, items);
+    // data-parent="" marks the top (My Computer); data-parent="My Computer" puts a named place under it
+    const parent = el.dataset.parent === undefined ? undefined : el.dataset.parent || null;
+    addFolder(win.explorer.home, el.dataset.title, el.dataset.icon, items, parent);
 
     toolbar.addEventListener('click', e => {
       const btn = e.target.closest('[data-nav]');
@@ -455,7 +486,7 @@
     setWindowTitle(win, folder.title, folder.icon);
     ex.toolbar.querySelector('[data-nav="back"]').disabled = ex.index <= 0;
     ex.toolbar.querySelector('[data-nav="forward"]').disabled = ex.index >= ex.history.length - 1;
-    ex.toolbar.querySelector('[data-nav="up"]').disabled = ex.path === ROOT;
+    ex.toolbar.querySelector('[data-nav="up"]').disabled = parentOf(ex.path) === null;
     updateStatus(win);
   }
 
@@ -467,6 +498,11 @@
       return;
     }
     const path = normalizePath(input);
+    const drive = path.match(/^([A-Z]):\\$/);
+    if (drive && NOT_READY.includes(drive[1])) {
+      ex.address.value = ex.path;
+      return driveNotReady(drive[1]);
+    }
     if (folderAt(path)) return navigate(win, path);
     const parent = folderAt(parentOf(path) || ROOT);
     const name = path.slice(path.lastIndexOf('\\') + 1).toLowerCase();
@@ -498,7 +534,7 @@
   }
 
   function setupExplorers() {
-    addFolder(ROOT, '(C:)', 'icons/computer-16.png', [makeFolderIcon('Desktop', 'C:\\Desktop')]);
+    addFolder(ROOT, '(C:)', 'icons/hard-disk-16.png', [makeFolderIcon('Desktop', 'C:\\Desktop')], 'My Computer');
     addFolder('C:\\Desktop', 'Desktop', 'icons/folder-16.png', [...desktopIcons.querySelectorAll('.icon')]);
     windows.forEach(win => { if (win.el.dataset.path) buildExplorer(win); });
     windows.forEach(win => { if (win.explorer) navigate(win, win.explorer.home); });
@@ -661,7 +697,7 @@
         { separator: true },
         { label: 'Status Bar', checked: () => !statusBar().hidden, action: () => { statusBar().hidden = !statusBar().hidden; } },
         { separator: true },
-        { label: 'Up One Level', enabled: () => win.explorer.path !== ROOT, action: () => navigate(win, parentOf(win.explorer.path)) },
+        { label: 'Up One Level', enabled: () => parentOf(win.explorer.path) !== null, action: () => navigate(win, parentOf(win.explorer.path)) },
         { label: 'Refresh', action: () => navigate(win, win.explorer.path) },
       ] },
       { label: 'Help', items: [
@@ -681,18 +717,18 @@
     return blocks.join('\n\n') + '\n';
   }
 
-  // "Save As": hands the visitor a file. The window title before " - " is the file name ("About Me.txt").
-  function saveAs(url, win) {
+  // "Save As": hands the visitor a file (nothing is stored anywhere)
+  function saveAs(url, name) {
     const link = document.createElement('a');
     link.href = url;
-    link.download = win.el.dataset.title.split(' - ')[0];
+    link.download = name;
     link.click();
   }
 
   function saveNotepad(win, body) {
     const blob = new Blob([notepadText(body).replace(/\n/g, '\r\n')], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
-    saveAs(url, win);
+    saveAs(url, win.el.dataset.title.split(' - ')[0]); // "About Me.txt - Notepad" -> "About Me.txt"
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
@@ -804,86 +840,26 @@
     });
   }
 
-  // ---------- Paint (the photo viewer) ----------
-  // The tool box and color box are for looks; the menus work.
-
-  const PAINT_TOOLS = [
-    '<path d="M3 4l5-2 5 3-1 6-6 2-3-4z" fill="none" stroke="currentColor" stroke-dasharray="2 1"/>', // free-form select
-    '<rect x="2.5" y="3.5" width="11" height="9" fill="none" stroke="currentColor" stroke-dasharray="2 1"/>', // select
-    '<path d="M3 10l6-6 4 4-6 6H3z" fill="#f2b8c6" stroke="currentColor"/>', // eraser
-    '<path d="M4 7l4-4 5 5-4 4z" fill="#fff" stroke="currentColor"/><path d="M12 9.5c1 1.5 1 3 0 3.5" fill="none" stroke="#00f" stroke-width="1.5"/>', // fill
-    '<path d="M3 14l6-6 2 2-6 6H3zM9 5l3-3 2 2-3 3z" fill="currentColor"/>', // pick color
-    '<circle cx="6.5" cy="6.5" r="4" fill="#cff" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9.5l4 4" stroke="currentColor" stroke-width="2"/>', // magnifier
-    '<path d="M3 13l1-3 7-7 2 2-7 7z" fill="#fc0" stroke="currentColor"/>', // pencil
-    '<path d="M9 2l4 4-3 3-4-4z" fill="#963" stroke="currentColor"/><path d="M6 6l-3 3c-1 1-1 4 1 4s3-1 4-3z" fill="currentColor"/>', // brush
-    '<path d="M2 8h5v6H2z" fill="currentColor"/><path d="M9 4h1v1H9zm3 1h1v1h-1zm-2 3h1v1h-1zm3 2h1v1h-1zm-3 2h1v1h-1z" fill="currentColor"/>', // airbrush
-    '<text x="8" y="13" text-anchor="middle" font-family="Times New Roman, serif" font-weight="bold" font-size="13" fill="currentColor">A</text>', // text
-    '<path d="M2 13L14 3" stroke="currentColor" stroke-width="1.5"/>', // line
-    '<path d="M2 12c3-10 9 2 12-8" fill="none" stroke="currentColor" stroke-width="1.5"/>', // curve
-    '<rect x="2.5" y="4.5" width="11" height="8" fill="none" stroke="currentColor"/>', // rectangle
-    '<path d="M2.5 12.5l2-8 5 3 4-4v9z" fill="none" stroke="currentColor"/>', // polygon
-    '<ellipse cx="8" cy="8.5" rx="6" ry="4.5" fill="none" stroke="currentColor"/>', // ellipse
-    '<rect x="2.5" y="4.5" width="11" height="8" rx="3" fill="none" stroke="currentColor"/>', // rounded rectangle
-  ];
-  const PAINT_PENCIL = 6;
-  // The default Windows 98 Paint palette
-  const PAINT_COLORS = [
-    '#000000', '#808080', '#800000', '#808000', '#008000', '#008080', '#000080', '#800080', '#808040', '#004040', '#0080ff', '#004080', '#8000ff', '#804000',
-    '#ffffff', '#c0c0c0', '#ff0000', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ffff80', '#00ff80', '#80ffff', '#8080ff', '#ff0080', '#ff8040',
-  ];
+  // ---------- Paint ----------
+  // paint.js does the drawing; this hands it what it needs from the window manager.
 
   function setupPaints() {
+    if (!window.Paint98) return;
+    const api = { buildMenuBar, openWindow, closeWindow, setWindowTitle, showMessage, saveAs };
     windows.forEach(win => {
-      if (win.el.dataset.app !== 'paint') return;
-      const tools = win.el.querySelector('.paint-tools');
-      const colors = win.el.querySelector('.paint-colors');
-      const statusBar = win.el.querySelector('.status-bar');
-      const image = win.el.querySelector('.paint-image');
-      tools.innerHTML = PAINT_TOOLS.map((svg, i) =>
-        `<span class="paint-tool${i === PAINT_PENCIL ? ' pressed' : ''}"><svg viewBox="0 0 16 16">${svg}</svg></span>`).join('');
-      colors.innerHTML = '<span class="paint-current"><span class="paint-fg"></span><span class="paint-bg"></span></span>' +
-        `<span class="paint-palette">${PAINT_COLORS.map(c => `<span style="background: ${c}"></span>`).join('')}</span>`;
-
-      let flipX = 1;
-      let flipY = 1;
-      const applyFlip = () => {
-        image.style.setProperty('--flip-x', flipX);
-        image.style.setProperty('--flip-y', flipY);
-      };
-      const toggle = el => () => { el.hidden = !el.hidden; };
-      const large = () => image.classList.contains('large');
-
-      win.el.querySelector('.title-bar').after(buildMenuBar(win, [
-        { label: 'File', items: [
-          { label: 'Save As...', action: () => saveAs(image.currentSrc || image.src, win) },
-          { separator: true },
-          { label: 'Exit', action: () => closeWindow(win.el.id) },
-        ] },
-        { label: 'View', items: [
-          { label: 'Tool Box', checked: () => !tools.hidden, action: toggle(tools) },
-          { label: 'Color Box', checked: () => !colors.hidden, action: toggle(colors) },
-          { label: 'Status Bar', checked: () => !statusBar.hidden, action: toggle(statusBar) },
-          { separator: true },
-          { label: 'Normal Size', radio: true, checked: () => !large(), action: () => image.classList.remove('large') },
-          { label: 'Large Size', radio: true, checked: large, action: () => image.classList.add('large') },
-        ] },
-        { label: 'Image', items: [
-          { label: 'Flip Horizontal', action: () => { flipX *= -1; applyFlip(); } },
-          { label: 'Flip Vertical', action: () => { flipY *= -1; applyFlip(); } },
-          { label: 'Invert Colors', action: () => image.classList.toggle('inverted') },
-        ] },
-        { label: 'Help', items: [
-          { label: 'About Paint', action: () => openWindow('about-site') },
-        ] },
-      ]));
+      if (win.el.dataset.app === 'paint') win.paint = window.Paint98.setup(win, api);
     });
   }
 
-  // Keyboard shortcuts inside explorer and notepad windows (Ctrl+A, F3), and Esc for message boxes
+  // Keyboard shortcuts inside explorer, notepad and Paint windows, and Esc to close dialogs
   document.addEventListener('keydown', e => {
     const win = activeWindow();
     if (!win || openMenu) return;
     const typing = e.target.matches('input, textarea');
+    if (win.paint) {
+      if (win.paint.onKey(e, typing)) e.preventDefault();
+      return;
+    }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && !typing) {
       if (win.explorer) {
         e.preventDefault();
@@ -896,7 +872,7 @@
       e.preventDefault();
       findTarget = win.notepad;
       findNext();
-    } else if (e.key === 'Escape' && (win.el.id === 'msgbox' || win.el.id === 'find')) {
+    } else if (e.key === 'Escape' && win.el.classList.contains('dialog')) {
       closeWindow(win.el.id);
     }
   });
@@ -908,7 +884,7 @@
     if (opener) {
       e.preventDefault();
       closeStartMenu();
-      openWindow(opener.dataset.open);
+      openFrom(opener);
       return;
     }
     const closer = e.target.closest('[data-close]');
@@ -981,6 +957,23 @@
     store.set('theme', next);
     closeStartMenu();
   }));
+
+  // ---------- Display Properties (Control Panel > Display) ----------
+
+  const schemeInputs = [...document.querySelectorAll('input[name="display-scheme"]')];
+  onOpen.display = () => schemeInputs.forEach(input => { input.checked = input.value === document.documentElement.dataset.theme; });
+
+  function applyScheme() {
+    const chosen = schemeInputs.find(input => input.checked)?.value;
+    if (!chosen) return;
+    applyTheme(chosen);
+    store.set('theme', chosen);
+  }
+  document.getElementById('display-apply').addEventListener('click', applyScheme);
+  document.getElementById('display-ok').addEventListener('click', () => {
+    applyScheme();
+    closeWindow('display');
+  });
 
   // ---------- Tabs ----------
 

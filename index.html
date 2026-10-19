@@ -6,9 +6,9 @@
   <title>Khalil Sahli - Portfolio 98</title>
   <meta name="description" content="Khalil Sahli, AI engineer (GenAI, LLM agents, edge AI) and computer engineering student at Enicarthage. Projects, experience, studies and resume.">
   <link rel="icon" href="icons/windows-16.png" type="image/png">
-  <!-- ?v= makes browsers fetch fresh copies: change it whenever style.css or script.js changes,
+  <!-- ?v= makes browsers fetch fresh copies: change it whenever style.css, script.js or paint.js changes,
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
-  <link rel="stylesheet" href="style.css?v=2026-10-19c">
+  <link rel="stylesheet" href="style.css?v=2026-10-19d">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -36,8 +36,9 @@
 
   <!-- Desktop icons (double-click to open, single tap on phones) -->
   <nav class="desktop-icons" aria-label="Desktop">
+    <button type="button" class="icon" data-open="computer"><img src="icons/my-computer.png" alt=""><span>My Computer</span></button>
     <button type="button" class="icon" data-open="about"><img src="icons/notepad-file.png" alt=""><span>About Me</span></button>
-    <button type="button" class="icon" data-open="photo"><img src="icons/picture.png" alt=""><span>Khalil.jpg</span></button>
+    <button type="button" class="icon" data-open="paint" data-paint-file="images/khalil.jpg" data-paint-name="Khalil.jpg"><img src="icons/picture.png" alt=""><span>Khalil.jpg</span></button>
     <button type="button" class="icon" data-open="projects"><img src="icons/folder.png" alt=""><span>My Projects</span></button>
     <button type="button" class="icon" data-open="ongoing"><img src="icons/hourglass.png" alt=""><span>In Progress</span></button>
     <button type="button" class="icon" data-open="career"><img src="icons/briefcase.png" alt=""><span>Experience</span></button>
@@ -78,7 +79,7 @@
     <div class="window-body notepad sunken">
       <h2>Hi, I'm Khalil</h2>
       <p>I'm Khalil Sahli, a computer engineering student at the National Engineering School of Carthage (Enicarthage) in Tunis, graduating in May 2027. I work as an AI engineer: generative AI, LLM agents and edge AI.</p>
-      <p>Photo: <a href="#photo" data-open="photo">Khalil.jpg</a> (on the desktop)</p>
+      <p>Photo: <a href="#paint" data-open="paint" data-paint-file="images/khalil.jpg" data-paint-name="Khalil.jpg">Khalil.jpg</a> (on the desktop)</p>
 
       <h2>What I work on</h2>
       <ul>
@@ -428,17 +429,73 @@
     </div>
   </section>
 
-  <!-- ============ PHOTO (Paint) ============ -->
-  <!-- To change the photo, replace images/khalil.jpg (320 x 320). The tool box and color box are added by script.js. -->
-  <section class="window" id="photo" data-title="Khalil.jpg - Paint" data-icon="icons/paint-16.png" data-app="paint" data-width="480" hidden>
+  <!-- ============ PAINT ============ -->
+  <!-- A working copy of Windows 98 Paint (paint.js). The desktop's Khalil.jpg opens images/khalil.jpg in it. -->
+  <section class="window" id="paint" data-title="untitled - Paint" data-icon="icons/paint-16.png" data-app="paint" data-width="600" hidden>
     <div class="paint-body">
-      <div class="paint-tools" aria-hidden="true"></div>
-      <div class="paint-canvas">
-        <img class="paint-image" src="images/khalil.jpg" alt="Photo of Khalil Sahli" width="320" height="320" loading="lazy">
+      <div class="paint-tools"></div>
+      <div class="paint-canvas"></div>
+    </div>
+    <div class="paint-colors"></div>
+    <div class="status-bar"><p></p><p></p><p></p></div>
+  </section>
+
+  <!-- Paint's Image > Attributes -->
+  <section class="window dialog" id="paint-attributes" data-title="Attributes" data-width="300" hidden>
+    <div class="window-body">
+      <div class="attr-fields">
+        <label for="paint-attr-width"><u>W</u>idth:</label>
+        <input type="number" id="paint-attr-width" class="field-input" min="1" max="2000">
+        <label for="paint-attr-height"><u>H</u>eight:</label>
+        <input type="number" id="paint-attr-height" class="field-input" min="1" max="2000">
+        <span class="muted attr-units">Units: pixels</span>
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" id="paint-attr-ok">OK</button>
+        <button type="button" class="button" data-close>Cancel</button>
       </div>
     </div>
-    <div class="paint-colors" aria-hidden="true"></div>
-    <div class="status-bar"><p>For Help, click Help Topics on the Help Menu.</p><p>320 x 320</p></div>
+  </section>
+
+  <!-- ============ MY COMPUTER ============ -->
+  <!-- data-drive icons show "The device is not ready", like an empty floppy or CD drive -->
+  <section class="window" id="computer" data-title="My Computer" data-icon="icons/my-computer-16.png" data-path="My Computer" data-parent="" data-width="520" hidden>
+    <div class="window-body explorer-view sunken">
+      <button type="button" class="icon" data-drive="A" data-status="3½ Floppy (A:)"><img src="icons/floppy-drive.png" alt=""><span>3½ Floppy (A:)</span></button>
+      <button type="button" class="icon" data-goto="C:\" data-status="Local Disk (C:)"><img src="icons/hard-disk.png" alt=""><span>(C:)</span></button>
+      <button type="button" class="icon" data-drive="D" data-status="CD-ROM Disc (D:)"><img src="icons/cd-drive.png" alt=""><span>(D:)</span></button>
+      <button type="button" class="icon" data-open="control-panel" data-status="Changes the settings of your computer."><img src="icons/control-panel.png" alt=""><span>Control Panel</span></button>
+    </div>
+    <div class="status-bar"><p>4 object(s)</p><p>Double-click an item to open it</p></div>
+  </section>
+
+  <section class="window" id="control-panel" data-title="Control Panel" data-icon="icons/control-panel-16.png" data-path="Control Panel" data-parent="My Computer" data-width="460" hidden>
+    <div class="window-body explorer-view sunken">
+      <button type="button" class="icon" data-open="display" data-status="Changes the appearance of your desktop."><img src="icons/display.png" alt=""><span>Display</span></button>
+      <button type="button" class="icon" data-open="about-site" data-status="Provides system information."><img src="icons/computer.png" alt=""><span>System</span></button>
+    </div>
+    <div class="status-bar"><p>2 object(s)</p><p>Double-click an item to open it</p></div>
+  </section>
+
+  <!-- Control Panel > Display -->
+  <section class="window dialog" id="display" data-title="Display Properties" data-icon="icons/display-16.png" data-width="360" hidden>
+    <div class="window-body">
+      <div class="tabs" role="tablist" aria-label="Display">
+        <button type="button" class="tab" role="tab" id="tab-appearance" aria-controls="panel-appearance" aria-selected="true">Appearance</button>
+      </div>
+      <div class="tab-panel" role="tabpanel" id="panel-appearance" aria-labelledby="tab-appearance">
+        <fieldset>
+          <legend>Scheme</legend>
+          <label class="radio"><input type="radio" name="display-scheme" value="light"> Windows Standard</label>
+          <label class="radio"><input type="radio" name="display-scheme" value="dark"> Dark</label>
+        </fieldset>
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" id="display-ok">OK</button>
+        <button type="button" class="button" data-close>Cancel</button>
+        <button type="button" class="button" id="display-apply">Apply</button>
+      </div>
+    </div>
   </section>
 
   <!-- ============ MESSAGE BOX (address bar errors, Find results) ============ -->
@@ -495,6 +552,7 @@
     <li><a href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt="">Resume.pdf</a></li>
     <li><button type="button" data-open="contact"><img src="icons/mail.png" alt="">Contact</button></li>
     <li><button type="button" data-open="doom"><img src="icons/doom.png" alt="">DOOM</button></li>
+    <li><button type="button" data-open="paint" data-paint-new><img src="icons/paint.png" alt="">Paint</button></li>
     <li class="separator" role="separator"></li>
     <li><button type="button" data-action="theme"><img src="icons/moon.png" alt=""><span id="theme-menu-label">Light Mode</span></button></li>
     <li><button type="button" data-open="about-site"><img src="icons/info.png" alt="">About this site</button></li>
@@ -522,6 +580,7 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="script.js?v=2026-10-19c"></script>
+<script src="paint.js?v=2026-10-19d"></script>
+<script src="script.js?v=2026-10-19d"></script>
 </body>
 </html>
