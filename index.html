@@ -6,7 +6,9 @@
   <title>Khalil Sahli - Portfolio 98</title>
   <meta name="description" content="Khalil Sahli, AI engineer (GenAI, LLM agents, edge AI) and computer engineering student at Enicarthage. Projects, experience, studies and resume.">
   <link rel="icon" href="icons/windows-16.png" type="image/png">
-  <link rel="stylesheet" href="style.css">
+  <!-- ?v= makes browsers fetch fresh copies: change it whenever style.css or script.js changes,
+       otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
+  <link rel="stylesheet" href="style.css?v=2026-10-19b">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -505,6 +507,6 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="script.js"></script>
+<script src="script.js?v=2026-10-19b"></script>
 </body>
 </html>
