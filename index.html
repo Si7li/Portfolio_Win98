@@ -6,9 +6,9 @@
   <title>Khalil Sahli - Portfolio 98</title>
   <meta name="description" content="Khalil Sahli, AI engineer (GenAI, LLM agents, edge AI) and computer engineering student at Enicarthage. Projects, experience, studies and resume.">
   <link rel="icon" href="icons/windows-16.png" type="image/png">
-  <!-- ?v= makes browsers fetch fresh copies: change it whenever style.css, script.js or paint.js changes,
+  <!-- ?v= makes browsers fetch fresh copies: change it whenever any of the .css or .js files change,
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
-  <link rel="stylesheet" href="style.css?v=2026-10-19d">
+  <link rel="stylesheet" href="style.css?v=2026-10-19e">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -43,9 +43,10 @@
     <button type="button" class="icon" data-open="ongoing"><img src="icons/hourglass.png" alt=""><span>In Progress</span></button>
     <button type="button" class="icon" data-open="career"><img src="icons/briefcase.png" alt=""><span>Experience</span></button>
     <button type="button" class="icon" data-open="studies"><img src="icons/certificate.png" alt=""><span>Studies</span></button>
-    <a class="icon" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt=""><span>Resume.pdf</span></a>
+    <button type="button" class="icon" data-open="resume"><img src="icons/document.png" alt=""><span>Resume.pdf</span></button>
     <button type="button" class="icon" data-open="contact"><img src="icons/mail.png" alt=""><span>Contact</span></button>
     <button type="button" class="icon" data-open="doom"><img src="icons/doom.png" alt=""><span>DOOM</span></button>
+    <button type="button" class="icon" data-open="minesweeper"><img src="icons/minesweeper.png" alt=""><span>Minesweeper</span></button>
     <button type="button" class="icon" data-open="recycle"><img src="icons/recycle-empty.png" alt=""><span>Recycle Bin</span></button>
   </nav>
 
@@ -59,7 +60,7 @@
           <button type="button" class="button" data-open="projects">My Projects</button>
           <button type="button" class="button" data-open="career">Experience</button>
           <button type="button" class="button" data-open="studies">Studies</button>
-          <a class="button" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+          <button type="button" class="button" data-open="resume">Resume (PDF)</button>
           <button type="button" class="button" data-open="contact">Contact</button>
         </div>
         <div class="welcome-text sunken">
@@ -349,7 +350,7 @@
         </ul>
       </fieldset>
       <div class="button-row">
-        <a class="button" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener">Open full resume</a>
+        <button type="button" class="button" data-open="resume">Open full resume</button>
       </div>
     </div>
   </section>
@@ -457,6 +458,59 @@
     </div>
   </section>
 
+  <!-- ============ RESUME (Reader) ============ -->
+  <!-- Shows CV_Khalil_Sahli.pdf with PDF.js (reader.js). To update the resume, replace that file. -->
+  <section class="window" id="resume" data-title="CV_Khalil_Sahli.pdf - Reader" data-icon="icons/document-16.png" data-app="reader" data-src="CV_Khalil_Sahli.pdf" data-width="760" hidden>
+    <div class="window-body reader-view">
+      <div class="reader-pages"><p class="reader-loading">Opening CV_Khalil_Sahli.pdf...</p></div>
+    </div>
+    <div class="status-bar"><p></p><p></p></div>
+  </section>
+
+  <!-- ============ MINESWEEPER ============ -->
+  <section class="window" id="minesweeper" data-title="Minesweeper" data-icon="icons/minesweeper-16.png" data-app="minesweeper" data-width="auto" hidden>
+    <div class="mine-body"></div>
+  </section>
+
+  <section class="window dialog" id="mine-custom" data-title="Custom Field" data-width="260" hidden>
+    <div class="window-body">
+      <div class="attr-fields">
+        <label for="mine-custom-height"><u>H</u>eight:</label>
+        <input type="number" id="mine-custom-height" class="field-input" min="9" max="24">
+        <label for="mine-custom-width"><u>W</u>idth:</label>
+        <input type="number" id="mine-custom-width" class="field-input" min="9" max="30">
+        <label for="mine-custom-mines"><u>M</u>ines:</label>
+        <input type="number" id="mine-custom-mines" class="field-input" min="10" max="667">
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" id="mine-custom-ok">OK</button>
+        <button type="button" class="button" data-close>Cancel</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="window dialog" id="mine-best" data-title="Fastest Mine Sweepers" data-width="340" hidden>
+    <div class="window-body">
+      <table class="mine-best-table">
+        <tr><th>Beginner:</th><td id="mine-best-beginner-time">999 seconds</td><td id="mine-best-beginner-name">Anonymous</td></tr>
+        <tr><th>Intermediate:</th><td id="mine-best-intermediate-time">999 seconds</td><td id="mine-best-intermediate-name">Anonymous</td></tr>
+        <tr><th>Expert:</th><td id="mine-best-expert-time">999 seconds</td><td id="mine-best-expert-name">Anonymous</td></tr>
+      </table>
+      <div class="button-row right">
+        <button type="button" class="button" id="mine-best-reset">Reset Scores</button>
+        <button type="button" class="button" data-close>OK</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="window dialog" id="mine-record" data-title="Congratulations" data-width="300" hidden>
+    <div class="window-body">
+      <p>You have the fastest time for <span id="mine-record-level">beginner</span> level. Please type your name.</p>
+      <input type="text" id="mine-record-name" class="field-input mine-record-input" maxlength="32" aria-label="Your name">
+      <div class="button-row center"><button type="button" class="button" id="mine-record-ok">OK</button></div>
+    </div>
+  </section>
+
   <!-- ============ MY COMPUTER ============ -->
   <!-- data-drive icons show "The device is not ready", like an empty floppy or CD drive -->
   <section class="window" id="computer" data-title="My Computer" data-icon="icons/my-computer-16.png" data-path="My Computer" data-parent="" data-width="520" hidden>
@@ -549,10 +603,11 @@
     <li><button type="button" data-open="about"><img src="icons/notepad-file.png" alt="">About Me</button></li>
     <li><button type="button" data-open="career"><img src="icons/briefcase.png" alt="">Experience</button></li>
     <li><button type="button" data-open="studies"><img src="icons/certificate.png" alt="">Studies</button></li>
-    <li><a href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt="">Resume.pdf</a></li>
+    <li><button type="button" data-open="resume"><img src="icons/document.png" alt="">Resume.pdf</button></li>
     <li><button type="button" data-open="contact"><img src="icons/mail.png" alt="">Contact</button></li>
     <li><button type="button" data-open="doom"><img src="icons/doom.png" alt="">DOOM</button></li>
     <li><button type="button" data-open="paint" data-paint-new><img src="icons/paint.png" alt="">Paint</button></li>
+    <li><button type="button" data-open="minesweeper"><img src="icons/minesweeper.png" alt="">Minesweeper</button></li>
     <li class="separator" role="separator"></li>
     <li><button type="button" data-action="theme"><img src="icons/moon.png" alt=""><span id="theme-menu-label">Light Mode</span></button></li>
     <li><button type="button" data-open="about-site"><img src="icons/info.png" alt="">About this site</button></li>
@@ -580,7 +635,9 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="paint.js?v=2026-10-19d"></script>
-<script src="script.js?v=2026-10-19d"></script>
+<script src="paint.js?v=2026-10-19e"></script>
+<script src="minesweeper.js?v=2026-10-19e"></script>
+<script src="reader.js?v=2026-10-19e"></script>
+<script src="script.js?v=2026-10-19e"></script>
 </body>
 </html>

@@ -67,7 +67,8 @@
 
   function place(win) {
     const { el } = win;
-    el.style.width = `${Number(el.dataset.width) || 480}px`;
+    // data-width="auto" lets the window size itself to its content (Minesweeper)
+    if (el.dataset.width !== 'auto') el.style.width = `${Number(el.dataset.width) || 480}px`;
     const maxLeft = Math.max(0, desktop.clientWidth - el.offsetWidth);
     const maxTop = Math.max(0, desktop.clientHeight - el.offsetHeight);
     let left, top;
@@ -129,7 +130,7 @@
     setFrames(win, false);
     win.task?.remove();
     win.task = null;
-    win.paint?.newImage(); // closing Paint throws the picture away
+    win.onClose?.(); // e.g. Paint throws the picture away, Minesweeper starts over
     if (location.hash === `#${id}`) setHash('');
     focusTopmost();
   }
@@ -840,14 +841,26 @@
     });
   }
 
-  // ---------- Paint ----------
-  // paint.js does the drawing; this hands it what it needs from the window manager.
+  // ---------- Apps in their own files: paint.js, minesweeper.js, reader.js ----------
+  // Each gets what it needs from the window manager and hands back its keyboard handler.
 
-  function setupPaints() {
-    if (!window.Paint98) return;
+  function setupApps() {
     const api = { buildMenuBar, openWindow, closeWindow, setWindowTitle, showMessage, saveAs };
     windows.forEach(win => {
-      if (win.el.dataset.app === 'paint') win.paint = window.Paint98.setup(win, api);
+      const app = win.el.dataset.app;
+      if (app === 'paint' && window.Paint98) {
+        win.paint = window.Paint98.setup(win, api);
+        win.keys = win.paint.onKey;
+        win.onClose = win.paint.newImage;
+      } else if (app === 'minesweeper' && window.Minesweeper98) {
+        const game = window.Minesweeper98.setup(win, api);
+        win.keys = game.onKey;
+        win.onClose = game.newGame;
+      } else if (app === 'reader' && window.Reader98) {
+        const reader = window.Reader98.setup(win, api);
+        win.keys = reader.onKey;
+        onOpen[win.el.id] = reader.open; // PDF.js loads the first time the resume opens
+      }
     });
   }
 
@@ -856,8 +869,8 @@
     const win = activeWindow();
     if (!win || openMenu) return;
     const typing = e.target.matches('input, textarea');
-    if (win.paint) {
-      if (win.paint.onKey(e, typing)) e.preventDefault();
+    if (win.keys) {
+      if (win.keys(e, typing)) e.preventDefault();
       return;
     }
     if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'a' && !typing) {
@@ -1120,7 +1133,7 @@
   document.querySelectorAll('.window').forEach(buildWindow);
   setupExplorers();
   setupNotepads();
-  setupPaints();
+  setupApps();
 
   const linked = location.hash.slice(1);
   if (windows.has(linked)) openWindow(linked);
