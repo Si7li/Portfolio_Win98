@@ -96,6 +96,7 @@ a:visited { color: var(--link-visited); }
   position: fixed;
   inset: 0 0 var(--taskbar-h) 0;
   overflow: hidden;
+  overflow: clip; /* unlike hidden, focus can't scroll it, so icons never shift when a window hangs off the bottom */
 }
 
 .desktop-icons {
