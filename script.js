@@ -681,13 +681,19 @@
     return blocks.join('\n\n') + '\n';
   }
 
-  function saveNotepad(win, body) {
-    const blob = new Blob([notepadText(body).replace(/\n/g, '\r\n')], { type: 'text/plain' });
+  // "Save As": hands the visitor a file. The window title before " - " is the file name ("About Me.txt").
+  function saveAs(url, win) {
     const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
+    link.href = url;
     link.download = win.el.dataset.title.split(' - ')[0];
     link.click();
-    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  }
+
+  function saveNotepad(win, body) {
+    const blob = new Blob([notepadText(body).replace(/\n/g, '\r\n')], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    saveAs(url, win);
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   }
 
   function selectAllText(body) {
@@ -795,6 +801,81 @@
       const body = win.el.querySelector('.notepad');
       win.notepad = body;
       win.el.querySelector('.title-bar').after(buildMenuBar(win, notepadMenus(win, body)));
+    });
+  }
+
+  // ---------- Paint (the photo viewer) ----------
+  // The tool box and color box are for looks; the menus work.
+
+  const PAINT_TOOLS = [
+    '<path d="M3 4l5-2 5 3-1 6-6 2-3-4z" fill="none" stroke="currentColor" stroke-dasharray="2 1"/>', // free-form select
+    '<rect x="2.5" y="3.5" width="11" height="9" fill="none" stroke="currentColor" stroke-dasharray="2 1"/>', // select
+    '<path d="M3 10l6-6 4 4-6 6H3z" fill="#f2b8c6" stroke="currentColor"/>', // eraser
+    '<path d="M4 7l4-4 5 5-4 4z" fill="#fff" stroke="currentColor"/><path d="M12 9.5c1 1.5 1 3 0 3.5" fill="none" stroke="#00f" stroke-width="1.5"/>', // fill
+    '<path d="M3 14l6-6 2 2-6 6H3zM9 5l3-3 2 2-3 3z" fill="currentColor"/>', // pick color
+    '<circle cx="6.5" cy="6.5" r="4" fill="#cff" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 9.5l4 4" stroke="currentColor" stroke-width="2"/>', // magnifier
+    '<path d="M3 13l1-3 7-7 2 2-7 7z" fill="#fc0" stroke="currentColor"/>', // pencil
+    '<path d="M9 2l4 4-3 3-4-4z" fill="#963" stroke="currentColor"/><path d="M6 6l-3 3c-1 1-1 4 1 4s3-1 4-3z" fill="currentColor"/>', // brush
+    '<path d="M2 8h5v6H2z" fill="currentColor"/><path d="M9 4h1v1H9zm3 1h1v1h-1zm-2 3h1v1h-1zm3 2h1v1h-1zm-3 2h1v1h-1z" fill="currentColor"/>', // airbrush
+    '<text x="8" y="13" text-anchor="middle" font-family="Times New Roman, serif" font-weight="bold" font-size="13" fill="currentColor">A</text>', // text
+    '<path d="M2 13L14 3" stroke="currentColor" stroke-width="1.5"/>', // line
+    '<path d="M2 12c3-10 9 2 12-8" fill="none" stroke="currentColor" stroke-width="1.5"/>', // curve
+    '<rect x="2.5" y="4.5" width="11" height="8" fill="none" stroke="currentColor"/>', // rectangle
+    '<path d="M2.5 12.5l2-8 5 3 4-4v9z" fill="none" stroke="currentColor"/>', // polygon
+    '<ellipse cx="8" cy="8.5" rx="6" ry="4.5" fill="none" stroke="currentColor"/>', // ellipse
+    '<rect x="2.5" y="4.5" width="11" height="8" rx="3" fill="none" stroke="currentColor"/>', // rounded rectangle
+  ];
+  const PAINT_PENCIL = 6;
+  // The default Windows 98 Paint palette
+  const PAINT_COLORS = [
+    '#000000', '#808080', '#800000', '#808000', '#008000', '#008080', '#000080', '#800080', '#808040', '#004040', '#0080ff', '#004080', '#8000ff', '#804000',
+    '#ffffff', '#c0c0c0', '#ff0000', '#ffff00', '#00ff00', '#00ffff', '#0000ff', '#ff00ff', '#ffff80', '#00ff80', '#80ffff', '#8080ff', '#ff0080', '#ff8040',
+  ];
+
+  function setupPaints() {
+    windows.forEach(win => {
+      if (win.el.dataset.app !== 'paint') return;
+      const tools = win.el.querySelector('.paint-tools');
+      const colors = win.el.querySelector('.paint-colors');
+      const statusBar = win.el.querySelector('.status-bar');
+      const image = win.el.querySelector('.paint-image');
+      tools.innerHTML = PAINT_TOOLS.map((svg, i) =>
+        `<span class="paint-tool${i === PAINT_PENCIL ? ' pressed' : ''}"><svg viewBox="0 0 16 16">${svg}</svg></span>`).join('');
+      colors.innerHTML = '<span class="paint-current"><span class="paint-fg"></span><span class="paint-bg"></span></span>' +
+        `<span class="paint-palette">${PAINT_COLORS.map(c => `<span style="background: ${c}"></span>`).join('')}</span>`;
+
+      let flipX = 1;
+      let flipY = 1;
+      const applyFlip = () => {
+        image.style.setProperty('--flip-x', flipX);
+        image.style.setProperty('--flip-y', flipY);
+      };
+      const toggle = el => () => { el.hidden = !el.hidden; };
+      const large = () => image.classList.contains('large');
+
+      win.el.querySelector('.title-bar').after(buildMenuBar(win, [
+        { label: 'File', items: [
+          { label: 'Save As...', action: () => saveAs(image.currentSrc || image.src, win) },
+          { separator: true },
+          { label: 'Exit', action: () => closeWindow(win.el.id) },
+        ] },
+        { label: 'View', items: [
+          { label: 'Tool Box', checked: () => !tools.hidden, action: toggle(tools) },
+          { label: 'Color Box', checked: () => !colors.hidden, action: toggle(colors) },
+          { label: 'Status Bar', checked: () => !statusBar.hidden, action: toggle(statusBar) },
+          { separator: true },
+          { label: 'Normal Size', radio: true, checked: () => !large(), action: () => image.classList.remove('large') },
+          { label: 'Large Size', radio: true, checked: large, action: () => image.classList.add('large') },
+        ] },
+        { label: 'Image', items: [
+          { label: 'Flip Horizontal', action: () => { flipX *= -1; applyFlip(); } },
+          { label: 'Flip Vertical', action: () => { flipY *= -1; applyFlip(); } },
+          { label: 'Invert Colors', action: () => image.classList.toggle('inverted') },
+        ] },
+        { label: 'Help', items: [
+          { label: 'About Paint', action: () => openWindow('about-site') },
+        ] },
+      ]));
     });
   }
 
@@ -1046,6 +1127,7 @@
   document.querySelectorAll('.window').forEach(buildWindow);
   setupExplorers();
   setupNotepads();
+  setupPaints();
 
   const linked = location.hash.slice(1);
   if (windows.has(linked)) openWindow(linked);
