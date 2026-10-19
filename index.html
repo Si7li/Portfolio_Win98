@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- EDIT: put your name in the title and description -->
-  <title>[Your Name] - Portfolio 98</title>
-  <meta name="description" content="[Your Name]'s portfolio: projects, career, studies and what I'm building right now.">
+  <title>Khalil Sahli - Portfolio 98</title>
+  <meta name="description" content="Khalil Sahli, AI engineer (GenAI, LLM agents, edge AI) and computer engineering student at Enicarthage. Projects, experience, studies and resume.">
   <link rel="icon" href="icons/windows-16.png" type="image/png">
   <link rel="stylesheet" href="style.css">
   <script>
@@ -25,10 +24,10 @@
 
 <!--
   HOW THIS PAGE WORKS
-  - Every <section class="window"> is one window. Its id is its link: yourname.github.io/#about opens "About Me".
+  - Every <section class="window"> is one window. Its id is its link: si7li.github.io/Portfolio_Win98/#about opens "About Me".
   - data-title = the text in the title bar, data-icon = its icon, data-width = how wide it opens (px).
   - Anything with data-open="some-id" opens that window when clicked.
-  - Search for "EDIT" to find everything you should replace.
+  - To update the resume, replace CV_Khalil_Sahli.pdf (same file name).
 -->
 
 <main id="desktop">
@@ -38,32 +37,30 @@
     <button type="button" class="icon" data-open="about"><img src="icons/notepad-file.png" alt=""><span>About Me</span></button>
     <button type="button" class="icon" data-open="projects"><img src="icons/folder.png" alt=""><span>My Projects</span></button>
     <button type="button" class="icon" data-open="ongoing"><img src="icons/hourglass.png" alt=""><span>In Progress</span></button>
-    <button type="button" class="icon" data-open="career"><img src="icons/briefcase.png" alt=""><span>Career</span></button>
+    <button type="button" class="icon" data-open="career"><img src="icons/briefcase.png" alt=""><span>Experience</span></button>
     <button type="button" class="icon" data-open="studies"><img src="icons/certificate.png" alt=""><span>Studies</span></button>
-    <!-- EDIT: upload your resume as resume.pdf next to index.html -->
-    <a class="icon" href="resume.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt=""><span>Resume.pdf</span></a>
+    <a class="icon" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt=""><span>Resume.pdf</span></a>
     <button type="button" class="icon" data-open="contact"><img src="icons/mail.png" alt=""><span>Contact</span></button>
     <button type="button" class="icon" data-open="doom"><img src="icons/doom.png" alt=""><span>DOOM</span></button>
     <button type="button" class="icon" data-open="recycle"><img src="icons/recycle-full.png" alt=""><span>Recycle Bin</span></button>
   </nav>
 
   <!-- ============ WELCOME ============ -->
-  <section class="window dialog" id="welcome" data-title="Welcome" data-icon="icons/computer-16.png" data-width="540" hidden>
+  <section class="window dialog" id="welcome" data-title="Welcome" data-icon="icons/computer-16.png" data-width="560" hidden>
     <div class="window-body welcome">
-      <h1 class="welcome-heading">Welcome to <b>[Your Name]</b>'s portfolio</h1>
+      <h1 class="welcome-heading">Welcome to <b>Khalil</b>'s portfolio</h1>
       <div class="welcome-columns">
         <div class="welcome-links">
           <button type="button" class="button" data-open="about">Who am I?</button>
           <button type="button" class="button" data-open="projects">My Projects</button>
-          <button type="button" class="button" data-open="ongoing">In Progress</button>
-          <button type="button" class="button" data-open="career">Career</button>
+          <button type="button" class="button" data-open="career">Experience</button>
           <button type="button" class="button" data-open="studies">Studies</button>
+          <a class="button" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
           <button type="button" class="button" data-open="contact">Contact</button>
         </div>
         <div class="welcome-text sunken">
-          <!-- EDIT: a short intro, 2-3 sentences -->
-          <p><b>Hi! I'm [Your Name]</b>, a [student / developer / designer] based in [City].</p>
-          <p>I build [the kind of things you build]. This site is where I keep my projects, my resume and whatever I'm working on right now.</p>
+          <p><b>Hi! I'm Khalil Sahli</b>, an AI engineer working on generative AI, LLM agents and edge AI, and a computer engineering student at Enicarthage in Tunis.</p>
+          <p><b>I'm looking for a 6- to 8-month end-of-studies internship starting January 2027.</b></p>
           <p>Double-click an icon on the desktop or use the buttons on the left to look around.</p>
         </div>
       </div>
@@ -75,176 +72,319 @@
   </section>
 
   <!-- ============ ABOUT ME (Notepad) ============ -->
-  <section class="window" id="about" data-title="About Me.txt - Notepad" data-icon="icons/notepad-16.png" data-width="540" hidden>
+  <section class="window" id="about" data-title="About Me.txt - Notepad" data-icon="icons/notepad-16.png" data-width="560" hidden>
     <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>S</u>earch</span><span><u>H</u>elp</span></div>
     <div class="window-body notepad sunken">
-      <!-- EDIT: who you are -->
-      <h2>Hi, I'm [Your Name]</h2>
-      <p>[One or two sentences on who you are and what you do. Example: I'm a computer science student who likes building tools that make everyday things a bit easier.]</p>
+      <h2>Hi, I'm Khalil</h2>
+      <p>I'm Khalil Sahli, a computer engineering student at the National Engineering School of Carthage (Enicarthage) in Tunis, graduating in May 2027. I work as an AI engineer: generative AI, LLM agents and edge AI.</p>
 
-      <h2>A bit about me</h2>
-      <p>[Where you're from, how you got into this, what you care about.]</p>
+      <h2>What I'm looking for</h2>
+      <p>A 6- to 8-month end-of-studies internship starting January 2027.</p>
 
-      <h2>What I'm good at</h2>
+      <h2>What I work on</h2>
       <ul>
-        <li>[Language / framework] - [how you've used it]</li>
-        <li>[Language / framework] - [how you've used it]</li>
-        <li>[Tool / skill] - [how you've used it]</li>
+        <li>RAG systems and AI agents: retrieval design, tool calling, guardrails and honest evaluation (STMicroelectronics, TicketPilot)</li>
+        <li>Computer vision: detection and segmentation pipelines with YOLOv11 and SAM 2 (CircuitVision)</li>
+        <li>Edge AI: int8 models on STM32 microcontrollers and neural networks in VHDL on FPGAs</li>
       </ul>
 
-      <h2>Outside of code</h2>
-      <p>[Hobbies, games, music, sports... the stuff that makes you a person.]</p>
+      <h2>Skills</h2>
+      <ul>
+        <li>GenAI &amp; LLMs: RAG, AI agents, LangGraph, LoRA fine-tuning, Hugging Face, Qdrant, Gemini API, Whisper</li>
+        <li>ML &amp; vision: PyTorch, TensorFlow, scikit-learn, YOLOv11, SAM 2, OpenCV</li>
+        <li>Edge &amp; embedded: int8 quantization, X-CUBE-AI, STM32, FreeRTOS, C, VHDL, FPGA</li>
+        <li>Software: Python, C++, SQL, FastAPI, Docker, Git, CI/CD, pytest, Linux, GCP</li>
+      </ul>
+
+      <h2>Languages</h2>
+      <p>Arabic (native), English (B2), French (B2), Spanish and Japanese (basic).</p>
+
+      <h2>For fun</h2>
+      <p>I like building low-level things from scratch: a hobby operating system (GyozaOS), a raycaster, a Mandelbrot explorer and cellular automata in C, and a CPU in VHDL. I run Arch Linux.</p>
 
       <p>-- EOF --</p>
     </div>
   </section>
 
   <!-- ============ MY PROJECTS (Explorer) ============ -->
-  <section class="window" id="projects" data-title="My Projects" data-icon="icons/folder-16.png" data-width="560" hidden>
+  <section class="window" id="projects" data-title="My Projects" data-icon="icons/folder-16.png" data-width="580" hidden>
     <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
     <div class="address-bar"><span>Address</span><div class="field">C:\My Documents\Projects</div></div>
     <div class="window-body explorer-view sunken">
-      <!-- EDIT: one icon per project. data-open must match the project window's id below. data-status shows in the status bar when selected. -->
-      <button type="button" class="icon" data-open="project-one" data-status="[Project One]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project One]</span></button>
-      <button type="button" class="icon" data-open="project-two" data-status="[Project Two]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project Two]</span></button>
-      <button type="button" class="icon" data-open="project-three" data-status="[Project Three]: [one-line description]"><img src="icons/program.png" alt=""><span>[Project Three]</span></button>
+      <!-- One icon per project. data-open must match the project window's id below. data-status shows in the status bar when selected. -->
+      <button type="button" class="icon" data-open="ticketpilot" data-status="TicketPilot: AI agent with RAG and tool calling"><img src="icons/program.png" alt=""><span>TicketPilot</span></button>
+      <button type="button" class="icon" data-open="circuitvision" data-status="CircuitVision: circuit photo to SPICE netlist"><img src="icons/program.png" alt=""><span>CircuitVision</span></button>
+      <button type="button" class="icon" data-open="tinyml-can" data-status="TinyML intrusion detection on a car's CAN bus"><img src="icons/program.png" alt=""><span>TinyML CAN IDS</span></button>
+      <button type="button" class="icon" data-open="fpga-mnist" data-status="Handwritten digit recognition on an FPGA, in VHDL"><img src="icons/program.png" alt=""><span>FPGA Digit Recognition</span></button>
+      <button type="button" class="icon" data-open="stm-docs" data-status="Turns ST documentation into structured JSON"><img src="icons/program.png" alt=""><span>STM Docs Toolkit</span></button>
+      <button type="button" class="icon" data-open="griffith-voice" data-status="Real-time voice translation and dubbing"><img src="icons/program.png" alt=""><span>Griffith Voice</span></button>
+      <button type="button" class="icon" data-open="microprocessor" data-status="A 16-bit CPU in VHDL on a Spartan-6"><img src="icons/program.png" alt=""><span>16-bit CPU</span></button>
+      <button type="button" class="icon" data-open="aur-check" data-status="Scans installed AUR packages for malware"><img src="icons/program.png" alt=""><span>AUR Checker</span></button>
     </div>
-    <div class="status-bar"><p>3 object(s)</p><p>Double-click a project to open it</p></div>
+    <div class="status-bar"><p>8 object(s)</p><p>Double-click a project to open it</p></div>
   </section>
 
   <!-- ============ PROJECT WINDOWS ============ -->
-  <!-- EDIT: copy one of these blocks for each project. Keep the id in sync with the icon above. -->
-  <section class="window" id="project-one" data-title="[Project One]" data-icon="icons/program-16.png" data-width="520" hidden>
+  <!-- To add a project: copy a block, give it a new id, and add a matching icon above.
+       To add a screenshot: <img class="screenshot" src="images/name.png" alt="..."> before the <h2>. -->
+  <section class="window" id="ticketpilot" data-title="TicketPilot" data-icon="icons/program-16.png" data-width="540" hidden>
     <div class="window-body">
-      <!-- Swap the placeholder div for: <img class="screenshot" src="images/project-one.png" alt="Screenshot of Project One"> -->
-      <div class="screenshot placeholder sunken">screenshot.png</div>
-      <h2>[Project One]</h2>
-      <p>[What it is, in one or two sentences.]</p>
-      <p>[Why you built it, what was hard, what you learned. Numbers help: "used by 40 classmates", "cut load time by 60%".]</p>
+      <h2>TicketPilot - AI Agent with RAG &amp; Tool Calling</h2>
+      <p class="muted">April 2026 - May 2026</p>
+      <p>An AI support agent that classifies each request, retrieves the rule that applies, calls business tools through REST APIs and drafts an answer with citations. Cases it can't handle confidently go to a human.</p>
+      <ul>
+        <li>45% of 150 labeled cases resolved automatically at 97.1% precision, the rest routed to human review</li>
+        <li>A verification node cut unsupported claims from 11.3% to 2.7%; hard-coded guardrails blocked 12/12 prompt injections</li>
+        <li>Hybrid vector search (RRF) in Qdrant lifted recall@5 to 86.0%, from 72.0% (BM25) and 78.7% (embeddings)</li>
+      </ul>
       <fieldset>
         <legend>Built with</legend>
-        <ul class="tags"><li>[HTML]</li><li>[CSS]</li><li>[JavaScript]</li></ul>
+        <ul class="tags"><li>Python</li><li>LangGraph</li><li>Qdrant</li><li>FastAPI</li></ul>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="window" id="circuitvision" data-title="CircuitVision" data-icon="icons/program-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <h2>CircuitVision - Detection, Segmentation &amp; VLM</h2>
+      <p class="muted">January 2026 - February 2026</p>
+      <p>Turns a photo of a circuit diagram into a SPICE netlist that's ready to simulate.</p>
+      <ul>
+        <li>Fine-tuned YOLOv11 for component detection (0.93 mAP-50), chained with SAM 2 segmentation and a vision-language model that reads component labels</li>
+        <li>Reached 98.7% segmentation accuracy on 267 annotated images by adapting SAM 2</li>
+        <li>Containerized the pipeline with Docker and served it from RunPod, removing the need for a local GPU</li>
+      </ul>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>Python</li><li>PyTorch</li><li>YOLOv11</li><li>SAM 2</li><li>Docker</li></ul>
       </fieldset>
       <div class="button-row">
-        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
-        <a class="button" href="#" target="_blank" rel="noopener">Live demo</a>
+        <a class="button" href="https://github.com/Si7li/netlist-simulator" target="_blank" rel="noopener">netlist-simulator code</a>
       </div>
     </div>
   </section>
 
-  <section class="window" id="project-two" data-title="[Project Two]" data-icon="icons/program-16.png" data-width="520" hidden>
+  <section class="window" id="tinyml-can" data-title="TinyML CAN Bus Intrusion Detection" data-icon="icons/program-16.png" data-width="540" hidden>
     <div class="window-body">
-      <div class="screenshot placeholder sunken">screenshot.png</div>
-      <h2>[Project Two]</h2>
-      <p>[What it is, in one or two sentences.]</p>
-      <p>[Why you built it, what was hard, what you learned.]</p>
+      <h2>TinyML CAN Bus Intrusion Detection</h2>
+      <p class="muted">September 2026 - October 2026</p>
+      <p>Detects attacks on a car's CAN bus in real time, with a tiny neural network running on a microcontroller.</p>
+      <ul>
+        <li>Detects DoS and four spoofing attacks on a live 500 kbit/s CAN bus with an int8 model on an STM32F446 (X-CUBE-AI): 40 &micro;s per frame, 20 KB flash, 1 KB RAM, macro-F1 0.94 vs 0.95 in float</li>
+        <li>Leakage-free evaluation on CICIoV2024 (1.4M real-vehicle frames): removed the duplicates that inflate macro-F1 to 0.99 and weighted rare classes, for 0.1% false positives and 0.5 false alarms per minute live</li>
+        <li>Benchmarked a random forest against a compact MLP and deployed the MLP: 1.1 KB of weights, 25 &micro;s per inference</li>
+      </ul>
       <fieldset>
         <legend>Built with</legend>
-        <ul class="tags"><li>[Python]</li><li>[Flask]</li></ul>
+        <ul class="tags"><li>Python</li><li>scikit-learn</li><li>C</li><li>X-CUBE-AI</li><li>STM32F446</li></ul>
+      </fieldset>
+    </div>
+  </section>
+
+  <section class="window" id="fpga-mnist" data-title="FPGA Digit Recognition" data-icon="icons/program-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <h2>Handwritten Digit Recognition on an FPGA</h2>
+      <p>A small neural network written in VHDL, running on a Digilent Nexys 3 board (Xilinx Spartan-6). You draw a digit with the mouse on your PC, the image is sent to the FPGA over UART, and the board shows its answer.</p>
+      <ul>
+        <li>Fully connected MLP, 64 &rarr; 32 (ReLU) &rarr; 10, with 2,410 parameters</li>
+        <li>97.5% accuracy on 360 test images, the same before and after 8-bit quantization</li>
+        <li>Bit-exact: the VHDL gives exactly the same answer as the Python model on every test image</li>
+        <li>Classifies one image in 99 clock cycles (about 8 &micro;s)</li>
+        <li>No IP cores: adders, multipliers and the UART are built from scratch, with no block RAM or DSP slices</li>
+      </ul>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>VHDL</li><li>PyTorch</li><li>Python</li><li>Spartan-6 FPGA</li></ul>
       </fieldset>
       <div class="button-row">
-        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
+        <a class="button" href="https://github.com/Si7li/MNIST-Neural-Network-On-FPGA" target="_blank" rel="noopener">View code &amp; demo</a>
       </div>
     </div>
   </section>
 
-  <section class="window" id="project-three" data-title="[Project Three]" data-icon="icons/program-16.png" data-width="520" hidden>
+  <section class="window" id="stm-docs" data-title="STM Documentation Toolkit" data-icon="icons/program-16.png" data-width="540" hidden>
     <div class="window-body">
-      <div class="screenshot placeholder sunken">screenshot.png</div>
-      <h2>[Project Three]</h2>
-      <p>[What it is, in one or two sentences.]</p>
-      <p>[Why you built it, what was hard, what you learned.]</p>
+      <h2>STM Documentation Toolkit</h2>
+      <p>Deterministic tools that turn ST's publicly published documentation (reference manuals, datasheets, errata sheets and the product-selector website) into clean, structured, machine-readable JSON.</p>
+      <ul>
+        <li><b>Product Selector:</b> rebuilds ST's selector spreadsheets from the datasheets and reports every value ST's database got wrong</li>
+        <li><b>Document Extractor:</b> turns reference manuals and errata sheets into JSON, as tables or the text of every section</li>
+        <li>Both run as local web pages that set themselves up on first launch, no terminal needed</li>
+      </ul>
       <fieldset>
         <legend>Built with</legend>
-        <ul class="tags"><li>[C++]</li></ul>
+        <ul class="tags"><li>Python</li><li>PDF parsing</li><li>JSON</li></ul>
       </fieldset>
       <div class="button-row">
-        <a class="button" href="https://github.com/" target="_blank" rel="noopener">View code</a>
+        <a class="button" href="https://github.com/Si7li/stm32-rm" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="window" id="griffith-voice" data-title="Griffith Voice" data-icon="icons/program-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <h2>Griffith Voice - AI Voice Cloner &amp; Dubber</h2>
+      <p>Real-time voice translation and dubbing: it transcribes speech, translates it and speaks it again in a natural-sounding synthesized voice.</p>
+      <ul>
+        <li>Real-time transcription with Whisper</li>
+        <li>Multi-language translation with GPT models</li>
+        <li>Voice synthesis with GPT-SoVITS</li>
+        <li>Streamlit web interface with logging and progress tracking</li>
+      </ul>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>Python</li><li>Whisper</li><li>GPT-SoVITS</li><li>Streamlit</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/Si7li/Griffith-Voice" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="window" id="microprocessor" data-title="16-bit CPU" data-icon="icons/program-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <h2>16-bit Microprocessor on an FPGA</h2>
+      <p>A simple accumulator-based microprocessor written in VHDL and implemented on a Digilent Nexys 3 board (Xilinx Spartan-6).</p>
+      <ul>
+        <li>16-bit data bus and 12-bit address bus (4,096 words of memory)</li>
+        <li>Three-state control unit: FETCH &rarr; DECODE &rarr; EXECUTE</li>
+        <li>ALU with add, sub, and, or, xor, not and pass; accumulator with zero and sign flags</li>
+        <li>Runs a preloaded demo program, with output on the board's 7-segment display</li>
+      </ul>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>VHDL</li><li>Xilinx ISE</li><li>Spartan-6 FPGA</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/Si7li/microProcesseur_fpga" target="_blank" rel="noopener">View code</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="window" id="aur-check" data-title="AUR PKGBUILD Checker" data-icon="icons/program-16.png" data-width="540" hidden>
+    <div class="window-body">
+      <h2>AUR PKGBUILD Checker</h2>
+      <p>A script that checks every installed AUR package on Arch Linux for suspicious content in its PKGBUILD. Written after the June 2026 Atomic Arch AUR supply-chain attack.</p>
+      <ul>
+        <li>Flags known malicious npm packages and npm/bun installs in non-JavaScript packages</li>
+        <li>Catches curl or wget piped into a shell, base64-decoded execution and eval with network fetches</li>
+        <li>Lists orphaned packages that have no maintainer</li>
+      </ul>
+      <fieldset>
+        <legend>Built with</legend>
+        <ul class="tags"><li>Bash</li><li>Arch Linux</li></ul>
+      </fieldset>
+      <div class="button-row">
+        <a class="button" href="https://github.com/Si7li/aur-pkgbuild-check" target="_blank" rel="noopener">View code</a>
       </div>
     </div>
   </section>
 
   <!-- ============ IN PROGRESS (copy dialog) ============ -->
-  <section class="window" id="ongoing" data-title="Copying... In Progress" data-icon="icons/hourglass-16.png" data-width="460" hidden>
+  <section class="window" id="ongoing" data-title="Copying... In Progress" data-icon="icons/hourglass-16.png" data-width="480" hidden>
     <div class="window-body">
-      <p class="muted">Things I'm building right now. Progress bars are honest estimates.</p>
-      <!-- EDIT: one fieldset per ongoing project. Change both the width % and aria-valuenow. -->
+      <p class="muted">What I'm working on right now.</p>
+      <!-- One fieldset per item. Change both the width % and aria-valuenow. -->
       <fieldset class="job">
-        <legend>[Ongoing Project A]</legend>
-        <p>[What it is and what you're working on this week.]</p>
-        <div class="progress" role="progressbar" aria-label="[Ongoing Project A] progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="65"><span style="width: 65%"></span></div>
-        <p class="progress-caption">65% done - next up: [the next milestone]</p>
+        <legend>Finding my end-of-studies internship</legend>
+        <p>Looking for a 6- to 8-month internship in AI engineering (GenAI, LLM agents, edge AI), starting January 2027.</p>
+        <div class="button-row">
+          <button type="button" class="button" data-open="contact">Contact me</button>
+          <a class="button" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener">Resume (PDF)</a>
+        </div>
       </fieldset>
       <fieldset class="job">
-        <legend>[Ongoing Project B]</legend>
-        <p>[What it is and what you're working on this week.]</p>
-        <div class="progress" role="progressbar" aria-label="[Ongoing Project B] progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="20"><span style="width: 20%"></span></div>
-        <p class="progress-caption">20% done - next up: [the next milestone]</p>
+        <legend>GyozaOS</legend>
+        <p>A hobby operating system for x86-64, written from scratch in C and booted by Limine. Serial and framebuffer output, GDT and TSS work.</p>
+        <div class="progress" role="progressbar" aria-label="GyozaOS progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="18"><span style="width: 18%"></span></div>
+        <p class="progress-caption">2 of 11 milestones done - next up: interrupts and exceptions &middot; <a href="https://github.com/Si7li/GyozaOS" target="_blank" rel="noopener">code</a></p>
       </fieldset>
-      <!-- EDIT: update this date whenever you change the list -->
-      <p class="muted">Last updated: [Month Year]</p>
+      <fieldset class="job">
+        <legend>Computer Engineering Degree</legend>
+        <p>Final year at Enicarthage, Tunis.</p>
+        <div class="progress" role="progressbar" aria-label="Degree progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="78"><span style="width: 78%"></span></div>
+        <p class="progress-caption">78% done - expected May 2027</p>
+      </fieldset>
+      <!-- Update this date whenever you change the list -->
+      <p class="muted">Last updated: October 2026</p>
     </div>
   </section>
 
-  <!-- ============ CAREER ============ -->
-  <section class="window" id="career" data-title="Career" data-icon="icons/briefcase-16.png" data-width="540" hidden>
+  <!-- ============ EXPERIENCE ============ -->
+  <section class="window" id="career" data-title="Experience" data-icon="icons/briefcase-16.png" data-width="580" hidden>
     <div class="window-body">
-      <!-- EDIT: one fieldset per job / internship / freelance gig, newest first -->
+      <!-- One fieldset per job / internship, newest first -->
       <fieldset class="job">
-        <legend>[Job Title] - [Company]</legend>
-        <p class="muted">[Start Month Year] - [End Month Year or Present] &middot; [City / Remote]</p>
+        <legend>Generative AI Engineer (Intern) - STMicroelectronics</legend>
+        <p class="muted">June 2026 - August 2026 &middot; El Ghazela, Tunis</p>
         <ul>
-          <li>[What you did, starting with a verb: Built, Led, Improved...]</li>
-          <li>[A result you're proud of]</li>
+          <li>Designed the chunking and retrieval structure feeding an internal RAG system, then benchmarked it on 50 questions across 25 errata sheets, comparing flat BM25, metadata-scoped BM25 and structured search</li>
+          <li>Built eight Python packages that turn technical PDFs into structured JSON, recovering 178 tables and 930 sections</li>
+          <li>Guarded the extraction rules with 928 automated tests and a citation check that reopens each cited page</li>
         </ul>
       </fieldset>
       <fieldset class="job">
-        <legend>[Job Title] - [Company]</legend>
-        <p class="muted">[Start Month Year] - [End Month Year] &middot; [City / Remote]</p>
+        <legend>Software Engineer (Intern) - Sagemcom</legend>
+        <p class="muted">July 2025 - August 2025 &middot; Ez Zahra, Tunis</p>
         <ul>
-          <li>[What you did]</li>
-          <li>[A result you're proud of]</li>
+          <li>Cut manual remediation effort by 80% by automating Wi-Fi card corrections with idempotent update logic</li>
+          <li>Built a Python tool that parses device-enclosure logs against a canonical reference and emits CSV reports</li>
+          <li>Kept releases reliable across heterogeneous hardware with unit tests and CI pipelines using pytest</li>
+        </ul>
+      </fieldset>
+      <fieldset class="job">
+        <legend>Machine Learning Engineer (Student Researcher) - IEEE Computer Tunisia Chapter</legend>
+        <p class="muted">October 2024 - November 2024 &middot; Soukra, Tunis</p>
+        <ul>
+          <li>Built a CNN perception pipeline for real-time detection and classification from camera input, with a data augmentation stage that kept accuracy steady across changing lighting and scenes</li>
+          <li>Benchmarked detection architectures and loss functions to maximize mAP and inference speed on GPU hardware</li>
+          <li>Cut model iteration time with reproducible training and evaluation workflows in PyTorch and OpenCV</li>
         </ul>
       </fieldset>
       <div class="button-row">
-        <a class="button" href="resume.pdf" target="_blank" rel="noopener">Open full resume</a>
+        <a class="button" href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener">Open full resume</a>
       </div>
     </div>
   </section>
 
   <!-- ============ STUDIES (tabbed dialog) ============ -->
-  <section class="window" id="studies" data-title="Studies Properties" data-icon="icons/certificate-16.png" data-width="500" hidden>
+  <section class="window" id="studies" data-title="Studies Properties" data-icon="icons/certificate-16.png" data-width="540" hidden>
     <div class="window-body">
       <div class="tabs" role="tablist" aria-label="Studies">
         <button type="button" class="tab" role="tab" id="tab-education" aria-controls="panel-education" aria-selected="true">Education</button>
-        <button type="button" class="tab" role="tab" id="tab-certs" aria-controls="panel-certs" aria-selected="false" tabindex="-1">Certifications</button>
-        <button type="button" class="tab" role="tab" id="tab-courses" aria-controls="panel-courses" aria-selected="false" tabindex="-1">Courses &amp; Clubs</button>
+        <button type="button" class="tab" role="tab" id="tab-competitions" aria-controls="panel-competitions" aria-selected="false" tabindex="-1">Competitions &amp; Leadership</button>
+        <button type="button" class="tab" role="tab" id="tab-languages" aria-controls="panel-languages" aria-selected="false" tabindex="-1">Languages</button>
       </div>
-      <!-- EDIT: your studies -->
       <div class="tab-panel" role="tabpanel" id="panel-education" aria-labelledby="tab-education">
         <fieldset class="job">
-          <legend>[Degree, e.g. B.Sc. Computer Science]</legend>
-          <p><b>[School / University]</b>, [City]</p>
-          <p class="muted">[Start Year] - [End Year or Expected Year]</p>
-          <p>[Focus areas, notable coursework, GPA or honors if you want to share them.]</p>
+          <legend>Computer Engineering Degree</legend>
+          <p><b>The National Engineering School of Carthage (Enicarthage)</b>, Charguia 2, Tunis</p>
+          <p class="muted">September 2024 - May 2027 (expected)</p>
+          <p>3-year engineering cycle, Master's-equivalent.</p>
         </fieldset>
         <fieldset class="job">
-          <legend>[Previous diploma]</legend>
-          <p><b>[School]</b>, [City]</p>
-          <p class="muted">[Year]</p>
+          <legend>Preparatory Classes for Engineering Schools</legend>
+          <p><b>Tunis Preparatory Engineering Institute (IPEIT)</b>, Montfleury, Tunis</p>
+          <p class="muted">September 2022 - May 2024</p>
+          <p>2 years, Mathematics &amp; Physics.</p>
         </fieldset>
       </div>
-      <div class="tab-panel" role="tabpanel" id="panel-certs" aria-labelledby="tab-certs" hidden>
+      <div class="tab-panel" role="tabpanel" id="panel-competitions" aria-labelledby="tab-competitions" hidden>
         <ul>
-          <li><b>[Certification name]</b> - [Issuer], [Year]</li>
-          <li><b>[Certification name]</b> - [Issuer], [Year]</li>
+          <li><b>1st place, CSTAM Annual Competition</b>, representing the IEEE Enicarthage Student Branch</li>
+          <li><b>TechX Hackathon:</b> led a team of 5 to design the technical challenges, engaging 200+ CS students</li>
+          <li><b>IEEEXtreme:</b> solved algorithmic problems in C++ and Python in a team of four under strict time limits</li>
+          <li><b>Workshop instructor, Robotics &amp; STM32</b> (NextGen26, AcaRobotics &amp; ALECSO, July 2026): trained 20+ participants in robotics and embedded development on STM32 Discovery kits</li>
         </ul>
       </div>
-      <div class="tab-panel" role="tabpanel" id="panel-courses" aria-labelledby="tab-courses" hidden>
-        <ul>
-          <li>[Online course, bootcamp, hackathon or club] - [what you got out of it]</li>
-          <li>[Another one]</li>
-        </ul>
+      <div class="tab-panel" role="tabpanel" id="panel-languages" aria-labelledby="tab-languages" hidden>
+        <table class="contact-table">
+          <tr><th>Arabic</th><td>Native</td></tr>
+          <tr><th>English</th><td>B2</td></tr>
+          <tr><th>French</th><td>B2</td></tr>
+          <tr><th>Spanish</th><td>Basic</td></tr>
+          <tr><th>Japanese</th><td>Basic</td></tr>
+        </table>
       </div>
       <div class="button-row right">
         <button type="button" class="button" data-close>OK</button>
@@ -253,30 +393,34 @@
   </section>
 
   <!-- ============ CONTACT ============ -->
-  <section class="window" id="contact" data-title="Contact" data-icon="icons/mail-16.png" data-width="400" hidden>
+  <section class="window" id="contact" data-title="Contact" data-icon="icons/mail-16.png" data-width="440" hidden>
     <div class="window-body">
       <p>Want to work together, or just say hi? Reach me here:</p>
-      <!-- EDIT: your links -->
       <table class="contact-table">
-        <tr><th>E-mail:</th><td><a href="mailto:you@example.com">you@example.com</a></td></tr>
-        <tr><th>GitHub:</th><td><a href="https://github.com/" target="_blank" rel="noopener">github.com/[username]</a></td></tr>
-        <tr><th>LinkedIn:</th><td><a href="https://www.linkedin.com/" target="_blank" rel="noopener">linkedin.com/in/[username]</a></td></tr>
+        <tr><th>E-mail:</th><td><a href="mailto:mohamedkhalil.sahli@enicar.ucar.tn">mohamedkhalil.sahli@enicar.ucar.tn</a></td></tr>
+        <tr><th>LinkedIn:</th><td><a href="https://www.linkedin.com/in/khalil-sahli" target="_blank" rel="noopener">linkedin.com/in/khalil-sahli</a></td></tr>
+        <tr><th>GitHub:</th><td><a href="https://github.com/Si7li" target="_blank" rel="noopener">github.com/Si7li</a></td></tr>
       </table>
       <div class="button-row right">
-        <a class="button" href="mailto:you@example.com">Send e-mail</a>
+        <a class="button" href="mailto:mohamedkhalil.sahli@enicar.ucar.tn">Send e-mail</a>
       </div>
     </div>
   </section>
 
   <!-- ============ RECYCLE BIN ============ -->
-  <section class="window" id="recycle" data-title="Recycle Bin" data-icon="icons/recycle-full-16.png" data-width="440" hidden>
+  <section class="window" id="recycle" data-title="Recycle Bin" data-icon="icons/recycle-full-16.png" data-width="500" hidden>
     <div class="menu-bar" aria-hidden="true"><span><u>F</u>ile</span><span><u>E</u>dit</span><span><u>V</u>iew</span><span><u>H</u>elp</span></div>
     <div class="window-body explorer-view sunken">
-      <!-- EDIT: old or abandoned projects, or jokes -->
-      <button type="button" class="icon" data-status="My very first website. We don't talk about it."><img src="icons/html.png" alt=""><span>first_site_v1.html</span></button>
-      <button type="button" class="icon" data-status="A game idea that was 10% code and 90% dreams."><img src="icons/program.png" alt=""><span>game_idea_FINAL_2.exe</span></button>
+      <!-- Early projects. Each icon is a link: double-click opens it on GitHub. -->
+      <a class="icon" href="https://github.com/Si7li/MandelbrotSet" target="_blank" rel="noopener" data-status="Mandelbrot set explorer in C, made in summer 2022"><img src="icons/program.png" alt=""><span>MandelbrotSet<wbr>.exe</span></a>
+      <a class="icon" href="https://github.com/Si7li/Raycaster" target="_blank" rel="noopener" data-status="A raycaster written in C"><img src="icons/program.png" alt=""><span>Raycaster<wbr>.exe</span></a>
+      <a class="icon" href="https://github.com/Si7li/SandGame" target="_blank" rel="noopener" data-status="A sand game written in C"><img src="icons/program.png" alt=""><span>SandGame<wbr>.exe</span></a>
+      <a class="icon" href="https://github.com/Si7li/CellularAutomata" target="_blank" rel="noopener" data-status="Cellular automata in C"><img src="icons/program.png" alt=""><span>CellularAutomata<wbr>.exe</span></a>
+      <a class="icon" href="https://github.com/Si7li/CellularAutomata3D" target="_blank" rel="noopener" data-status="Cellular automata in 3D, in C"><img src="icons/program.png" alt=""><span>CellularAutomata3D<wbr>.exe</span></a>
+      <a class="icon" href="https://github.com/Si7li/Chess-Predictor-CNN" target="_blank" rel="noopener" data-status="CNNs that predict the best chess move from a board position (FEN)"><img src="icons/notepad-file.png" alt=""><span>Chess-Predictor-CNN<wbr>.ipynb</span></a>
+      <a class="icon" href="https://github.com/Si7li/BasketballAnalysis" target="_blank" rel="noopener" data-status="Basketball analysis AI model"><img src="icons/notepad-file.png" alt=""><span>BasketballAnalysis<wbr>.ipynb</span></a>
     </div>
-    <div class="status-bar"><p>2 object(s)</p><p>Click an item to see what it was</p></div>
+    <div class="status-bar"><p>7 object(s)</p><p>Early projects - double-click to open on GitHub</p></div>
   </section>
 
   <!-- ============ DOOM ============ -->
@@ -295,8 +439,7 @@
         <div>
           <p><b>Portfolio 98</b></p>
           <p>Hosted on GitHub Pages.<br>Built with plain HTML, CSS and JavaScript.<br>No frameworks were harmed.</p>
-          <!-- EDIT -->
-          <p class="muted">Registered to: [Your Name]</p>
+          <p class="muted">Registered to: Khalil Sahli</p>
         </div>
       </div>
       <div class="button-row right">
@@ -314,9 +457,9 @@
     <li><button type="button" data-open="projects"><img src="icons/folder.png" alt="">My Projects</button></li>
     <li><button type="button" data-open="ongoing"><img src="icons/hourglass.png" alt="">In Progress</button></li>
     <li><button type="button" data-open="about"><img src="icons/notepad-file.png" alt="">About Me</button></li>
-    <li><button type="button" data-open="career"><img src="icons/briefcase.png" alt="">Career</button></li>
+    <li><button type="button" data-open="career"><img src="icons/briefcase.png" alt="">Experience</button></li>
     <li><button type="button" data-open="studies"><img src="icons/certificate.png" alt="">Studies</button></li>
-    <li><a href="resume.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt="">Resume.pdf</a></li>
+    <li><a href="CV_Khalil_Sahli.pdf" target="_blank" rel="noopener"><img src="icons/document.png" alt="">Resume.pdf</a></li>
     <li><button type="button" data-open="contact"><img src="icons/mail.png" alt="">Contact</button></li>
     <li><button type="button" data-open="doom"><img src="icons/doom.png" alt="">DOOM</button></li>
     <li class="separator" role="separator"></li>

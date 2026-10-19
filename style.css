@@ -127,7 +127,7 @@ a:visited { color: var(--link-visited); }
 }
 .icon:visited { color: var(--desktop-text); }
 .icon img { width: 32px; height: 32px; image-rendering: pixelated; }
-.icon span { padding: 1px 2px; line-height: 1.2; overflow-wrap: anywhere; }
+.icon span { padding: 1px 2px; line-height: 1.2; overflow-wrap: break-word; max-width: 100%; }
 .icon:focus-visible { outline: none; }
 .icon:focus-visible span { outline: 1px dotted #ff0; }
 .icon.selected span { background: var(--navy); color: #fff; }
@@ -226,6 +226,7 @@ a:visited { color: var(--link-visited); }
   margin: 2px 0 0;
   padding: 12px;
 }
+.explorer-view .icon { width: 96px; font-size: 12px; }
 .explorer-view .icon,
 .explorer-view .icon:visited { color: var(--field-text); }
 .explorer-view .icon.selected span { color: #fff; }
