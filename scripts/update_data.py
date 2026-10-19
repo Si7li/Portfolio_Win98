@@ -1,11 +1,12 @@
-"""Refresh data/github.json: recent public repos and GyozaOS milestone progress.
+"""Refresh data/github.json: recent public repos, GyozaOS milestone progress and
+the date the site was last pushed.
 
-Run by the weekly GitHub Action before each deploy, or locally:
+The page fetches this data live from GitHub in the visitor's browser (script.js);
+this file is only the fallback for when that fails. Refresh it now and then with:
     python3 scripts/update_data.py
 Uses only the standard library. Set GITHUB_TOKEN for a higher API rate limit.
 If a request fails, the existing data file is left untouched.
 """
-import datetime
 import json
 import os
 import re
@@ -29,8 +30,15 @@ def get(url, accept='application/vnd.github+json'):
         return resp.read().decode('utf-8')
 
 
-def recent_repos():
-    repos = json.loads(get(f'https://api.github.com/users/{USER}/repos?type=owner&sort=pushed&per_page=100'))
+def fetch_repos():
+    return json.loads(get(f'https://api.github.com/users/{USER}/repos?type=owner&sort=pushed&per_page=100'))
+
+
+def site_pushed(repos):
+    return next((r['pushed_at'][:10] for r in repos if r['name'] == 'Portfolio_Win98'), None)
+
+
+def recent_repos(repos):
     picked = [r for r in repos if not r['fork'] and not r['archived'] and r['name'] not in SKIP]
     return [{
         'name': r['name'],
@@ -68,12 +76,13 @@ def gyozaos_progress():
 
 def main():
     try:
+        repos = fetch_repos()
         data = {
-            'updated': datetime.date.today().isoformat(),
-            'repos': recent_repos(),
+            'updated': site_pushed(repos),
+            'repos': recent_repos(repos),
             'gyozaos': gyozaos_progress(),
         }
-    except Exception as exc:  # keep the last good data rather than deploying a broken file
+    except Exception as exc:  # keep the last good data rather than writing a broken file
         print(f'update failed, keeping existing data: {exc}', file=sys.stderr)
         return 1
     OUT.parent.mkdir(exist_ok=True)

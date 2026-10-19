@@ -401,10 +401,50 @@
     }));
   }
 
-  // data/github.json is refreshed every Monday by .github/workflows/deploy.yml.
-  // If it can't load (e.g. the page was opened from disk), the text already in the page stays.
-  fetch('data/github.json')
-    .then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))))
+  // GitHub data is fetched live in the visitor's browser (one API call per visit; the limit is 60 an hour).
+  // If that fails, data/github.json (made by scripts/update_data.py) is used, and failing that,
+  // the text already in the page stays. Keep the filtering below in sync with that script.
+  const GITHUB_USER = 'Si7li';
+  const SITE_REPO = 'Portfolio_Win98';
+
+  const getJson = url => fetch(url).then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))));
+  const getText = url => fetch(url).then(res => (res.ok ? res.text() : Promise.reject(new Error(`HTTP ${res.status}`))));
+
+  // Milestone table rows in the GyozaOS README look like "| 5–6 — Physical and virtual memory | done |"
+  function parseMilestones(readme) {
+    let done = 0;
+    let total = 0;
+    let next = null;
+    for (const line of readme.split('\n')) {
+      const m = line.match(/^\|\s*(\d+)(?:\s*[–-]\s*(\d+))?\s*[—–-]+\s*(.+?)\s*\|\s*(.*?)\s*\|\s*$/);
+      if (!m) continue;
+      const count = Number(m[2] || m[1]) - Number(m[1]) + 1;
+      const state = m[4].trim().toLowerCase();
+      total += count;
+      if (state === 'done') done += count;
+      else if (!next) next = { title: m[3], state };
+    }
+    return total ? { done, total, next } : null;
+  }
+
+  async function liveGitHubData() {
+    const [repos, readme] = await Promise.all([
+      getJson(`https://api.github.com/users/${GITHUB_USER}/repos?type=owner&sort=pushed&per_page=100`),
+      getText(`https://raw.githubusercontent.com/${GITHUB_USER}/GyozaOS/HEAD/README.md`).catch(() => ''),
+    ]);
+    const site = repos.find(r => r.name === SITE_REPO);
+    return {
+      updated: site?.pushed_at.slice(0, 10),
+      repos: repos
+        .filter(r => !r.fork && !r.archived && r.name !== SITE_REPO && r.name !== GITHUB_USER)
+        .slice(0, 6)
+        .map(r => ({ name: r.name, url: r.html_url, description: r.description || '', language: r.language || '', pushed: r.pushed_at.slice(0, 10) })),
+      gyozaos: parseMilestones(readme),
+    };
+  }
+
+  liveGitHubData()
+    .catch(() => getJson('data/github.json'))
     .then(data => {
       if (data.gyozaos) {
         const { done, total, next } = data.gyozaos;
