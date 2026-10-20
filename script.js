@@ -534,8 +534,28 @@
     updateStatus(win);
   }
 
+  // An app that opens a website in a new tab, like C:\GitHub\GitHub.exe
+  function makeAppIcon(name, href, icon) {
+    const app = document.createElement('a');
+    app.className = 'icon';
+    app.href = href;
+    app.target = '_blank';
+    app.rel = 'noopener';
+    app.dataset.status = `Opens ${name} in a new window`;
+    app.innerHTML = '<img alt=""><span></span>';
+    app.querySelector('img').src = icon;
+    app.querySelector('span').textContent = `${name}.exe`;
+    return app;
+  }
+
   function setupExplorers() {
-    addFolder(ROOT, '(C:)', 'icons/hard-disk-16.png', [makeFolderIcon('Desktop', 'C:\\Desktop')], 'My Computer');
+    // Each Quick Launch program also gets its own folder in C:\ holding its app
+    const apps = [...document.querySelectorAll('.quick-launch-button')]
+      .map(link => ({ name: link.title, href: link.href, icon: link.dataset.appIcon }))
+      .sort((a, b) => a.name.localeCompare(b.name));
+    const rootItems = [makeFolderIcon('Desktop', 'C:\\Desktop'), ...apps.map(app => makeFolderIcon(app.name, ROOT + app.name))];
+    addFolder(ROOT, '(C:)', 'icons/hard-disk-16.png', rootItems, 'My Computer');
+    apps.forEach(app => addFolder(ROOT + app.name, app.name, 'icons/folder-16.png', [makeAppIcon(app.name, app.href, app.icon)]));
     addFolder('C:\\Desktop', 'Desktop', 'icons/folder-16.png', [...desktopIcons.querySelectorAll('.icon')]);
     windows.forEach(win => { if (win.el.dataset.path) buildExplorer(win); });
     windows.forEach(win => { if (win.explorer) navigate(win, win.explorer.home); });

@@ -8,7 +8,7 @@
   <link rel="icon" href="icons/windows-16.png" type="image/png">
   <!-- ?v= makes browsers fetch fresh copies: change it whenever any of the .css or .js files change,
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
-  <link rel="stylesheet" href="style.css?v=2026-10-20b">
+  <link rel="stylesheet" href="style.css?v=2026-10-20c">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -620,10 +620,11 @@
   <button type="button" class="start-button" id="start-button" aria-haspopup="true" aria-expanded="false" aria-controls="start-menu">
     <img src="icons/windows-16.png" alt="">Start
   </button>
-  <!-- Quick Launch: pinned links next to Start, like Windows 98 (icons/linkedin-16.png, icons/github-16.png) -->
+  <!-- Quick Launch: pinned links next to Start, like Windows 98. Each one also gets a folder in C:\ with its app
+       (C:\LinkedIn\LinkedIn.exe); data-app-icon is the 32px icon used there. -->
   <div class="quick-launch" role="toolbar" aria-label="Quick Launch">
-    <a class="quick-launch-button" href="https://www.linkedin.com/in/khalil-sahli" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn (opens in a new tab)"><img src="icons/linkedin-16.png" alt="" width="16" height="16"></a>
-    <a class="quick-launch-button" href="https://github.com/Si7li" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub (opens in a new tab)"><img src="icons/github-16.png" alt="" width="16" height="16"></a>
+    <a class="quick-launch-button" href="https://www.linkedin.com/in/khalil-sahli" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn (opens in a new tab)" data-app-icon="icons/linkedin.png"><img src="icons/linkedin-16.png" alt="" width="16" height="16"></a>
+    <a class="quick-launch-button" href="https://github.com/Si7li" target="_blank" rel="noopener" title="GitHub" aria-label="GitHub (opens in a new tab)" data-app-icon="icons/github.png"><img src="icons/github-16.png" alt="" width="16" height="16"></a>
   </div>
   <div class="task-list" id="task-list"></div>
   <div class="tray">
@@ -640,9 +641,9 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="paint.js?v=2026-10-20b"></script>
-<script src="minesweeper.js?v=2026-10-20b"></script>
-<script src="reader.js?v=2026-10-20b"></script>
-<script src="script.js?v=2026-10-20b"></script>
+<script src="paint.js?v=2026-10-20c"></script>
+<script src="minesweeper.js?v=2026-10-20c"></script>
+<script src="reader.js?v=2026-10-20c"></script>
+<script src="script.js?v=2026-10-20c"></script>
 </body>
 </html>
