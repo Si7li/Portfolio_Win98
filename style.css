@@ -3,6 +3,7 @@
    :root holds the classic light theme, [data-theme="dark"] below overrides it. */
 :root {
   --desktop: #008080;
+  --wallpaper: url("images/wallpaper.jpg"); /* set to none for a plain desktop color */
   --desktop-text: #fff;
   --text: #000;
   --field: #fff;
@@ -74,7 +75,7 @@
 html, body { height: 100%; margin: 0; }
 
 body {
-  background: var(--desktop);
+  background: var(--desktop) var(--wallpaper) center / cover no-repeat;
   color: var(--text);
   font: 12px/1.4 var(--ui-font);
   overflow: hidden;
@@ -132,6 +133,8 @@ a:visited { color: var(--link-visited); }
 .icon:visited { color: var(--desktop-text); }
 .icon img { width: 32px; height: 32px; image-rendering: pixelated; }
 .icon span { padding: 1px 2px; line-height: 1.2; overflow-wrap: break-word; max-width: 100%; }
+.desktop-icons .icon span { text-shadow: 1px 1px 0 #000, 0 0 3px #000; } /* readable on a wallpaper */
+.desktop-icons .icon.selected span { text-shadow: none; }
 .icon:focus-visible { outline: none; }
 .icon:focus-visible span { outline: 1px dotted #ff0; }
 .icon.selected span { background: var(--navy); color: #fff; }
