@@ -20,6 +20,7 @@ On phones, windows open full screen one at a time:
 ## Features
 
 - Draggable windows with minimize, maximize and close, a taskbar, a Start menu and a clock
+- Quick Launch next to Start with my LinkedIn and GitHub, as hand-drawn 16x16 pixel icons
 - Every window has its own link, for example [`#projects`](https://si7li.github.io/Portfolio_Win98/#projects)
 - A working Explorer: type a path like `C:\Desktop\My Projects` in the address bar, go Back / Forward / Up, and use real File, Edit, View and Help menus (keyboard too: Alt+letter, arrows, Esc)
 - Notepad menus that work: Save As downloads the text, Copy, Select All, Word Wrap, Find / Find Next

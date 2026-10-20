@@ -591,7 +591,17 @@ legend { padding: 0 3px; font-weight: bold; }
 .start-button img { width: 16px; height: 16px; image-rendering: pixelated; }
 .start-button[aria-expanded="true"], .start-button:active { box-shadow: var(--pressed); }
 
-.task-list { display: flex; gap: 3px; flex: 1; min-width: 0; height: 100%; padding-left: 6px; box-shadow: inset 1px 0 var(--shadow), inset 2px 0 var(--highlight); }
+/* Quick Launch and the task list each start with an etched line and a raised grip, like Windows 98 */
+.quick-launch, .task-list { position: relative; height: 100%; padding-left: 11px; box-shadow: inset 1px 0 var(--shadow), inset 2px 0 var(--highlight); }
+.quick-launch::before, .task-list::before { content: ""; position: absolute; top: 2px; bottom: 2px; left: 5px; width: 3px; box-shadow: inset 1px 1px var(--highlight), inset -1px -1px var(--shadow); }
+.quick-launch { display: flex; align-items: center; gap: 1px; flex: none; padding-right: 3px; }
+.quick-launch-button { display: grid; place-items: center; width: 23px; height: 22px; }
+.quick-launch-button img { width: 16px; height: 16px; image-rendering: pixelated; }
+.quick-launch-button:hover { box-shadow: var(--thin-raised); }
+.quick-launch-button:active { box-shadow: var(--thin-sunken); }
+.quick-launch-button:active img { transform: translate(1px, 1px); }
+.quick-launch-button:focus-visible { outline: 1px dotted var(--text); outline-offset: -3px; }
+.task-list { display: flex; gap: 3px; flex: 1; min-width: 0; }
 .task {
   display: flex;
   align-items: center;
