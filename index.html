@@ -10,7 +10,7 @@
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
   <!-- The IBM VGA font for the boot screen, fetched early so the BIOS text never shows in another font first -->
   <link rel="preload" href="fonts/Web437_IBM_VGA_9x16.woff" as="font" type="font/woff" crossorigin>
-  <link rel="stylesheet" href="style.css?v=2026-10-21g">
+  <link rel="stylesheet" href="style.css?v=2026-10-21j">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -477,7 +477,7 @@
   </section>
 
   <!-- ============ MINESWEEPER ============ -->
-  <section class="window" id="minesweeper" data-title="Minesweeper" data-icon="icons/minesweeper-16.png" data-app="minesweeper" data-width="auto" hidden>
+  <section class="window" id="minesweeper" data-title="Minesweeper" data-icon="icons/minesweeper-16.png" data-app="minesweeper" data-width="auto" data-resizable="false" hidden>
     <div class="mine-body"></div>
   </section>
 
@@ -684,9 +684,9 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="paint.js?v=2026-10-21g"></script>
-<script src="minesweeper.js?v=2026-10-21g"></script>
-<script src="reader.js?v=2026-10-21g"></script>
-<script src="script.js?v=2026-10-21g"></script>
+<script src="paint.js?v=2026-10-21j"></script>
+<script src="minesweeper.js?v=2026-10-21j"></script>
+<script src="reader.js?v=2026-10-21j"></script>
+<script src="script.js?v=2026-10-21j"></script>
 </body>
 </html>

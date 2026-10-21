@@ -163,6 +163,37 @@ a:visited { color: var(--link-visited); }
   max-height: none;
 }
 
+/* Resizing: invisible strips along each edge and corner, and the Windows 98 size grip */
+.resize-handle { position: absolute; z-index: 5; }
+.resize-handle[data-dir="n"] { top: -3px; left: 8px; right: 8px; height: 7px; cursor: ns-resize; }
+.resize-handle[data-dir="s"] { bottom: -3px; left: 8px; right: 8px; height: 7px; cursor: ns-resize; }
+.resize-handle[data-dir="e"] { right: -3px; top: 8px; bottom: 8px; width: 7px; cursor: ew-resize; }
+.resize-handle[data-dir="w"] { left: -3px; top: 8px; bottom: 8px; width: 7px; cursor: ew-resize; }
+.resize-handle[data-dir="ne"] { top: -3px; right: -3px; width: 12px; height: 12px; cursor: nesw-resize; }
+.resize-handle[data-dir="nw"] { top: -3px; left: -3px; width: 12px; height: 12px; cursor: nwse-resize; }
+.resize-handle[data-dir="se"] { bottom: -3px; right: -3px; width: 16px; height: 16px; cursor: nwse-resize; }
+.resize-handle[data-dir="sw"] { bottom: -3px; left: -3px; width: 12px; height: 12px; cursor: nesw-resize; }
+.size-grip {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+  z-index: 4;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  background: linear-gradient(135deg,
+    transparent 0 41%, var(--highlight) 41% 47%, var(--shadow) 47% 59%,
+    transparent 59% 65%, var(--highlight) 65% 71%, var(--shadow) 71% 83%,
+    transparent 83% 89%, var(--highlight) 89% 95%, var(--shadow) 95%);
+}
+.window.maximized .resize-handle, .window.maximized .size-grip { display: none; }
+body.window-busy { user-select: none; -webkit-user-select: none; }
+body.window-busy iframe { pointer-events: none; }
+/* Contents that normally have a fixed height stretch (or shrink and scroll) to fit a resized window */
+.window.sized .paint-body, .window.sized .window-body.reader-view { flex: 1 1 auto; height: auto; min-height: 0; }
+.window.sized .window-body.explorer-view, .window.sized .window-body.notepad { min-height: 0; }
+.window.sized .doom-body iframe { height: 100%; aspect-ratio: auto; }
+
 .title-bar {
   display: flex;
   align-items: center;
@@ -763,6 +794,7 @@ body.dimmed #shutdown-dialog { z-index: 9001 !important; }
     max-height: none;
   }
   .tb-max { display: none; }
+  .resize-handle, .size-grip { display: none; }
   .doom-body iframe { height: 100%; aspect-ratio: auto; }
   .paint-body { flex: 1 1 auto; height: auto; }
   .window-body.reader-view { flex: 1 1 auto; height: auto; padding: 6px; }

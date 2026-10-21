@@ -50,6 +50,8 @@
     }
     el.addEventListener('pointerdown', () => focusWindow(el.id));
     makeDraggable(win, bar);
+    // Dialogs keep a fixed size, and so can windows marked data-resizable="false" (Minesweeper)
+    if (!isDialog && el.dataset.resizable !== 'false') makeResizable(win);
   }
 
   // Changes a window's title (and icon) everywhere it shows: title bar, taskbar, screen readers
@@ -206,6 +208,7 @@
       const offsetX = e.clientX - win.el.offsetLeft;
       const offsetY = e.clientY - win.el.offsetTop;
       bar.setPointerCapture(e.pointerId);
+      document.body.classList.add('window-busy');
 
       const move = ev => {
         // Keep at least 40px of the window and the whole title bar reachable
@@ -215,6 +218,7 @@
         win.el.style.top = `${y}px`;
       };
       const stop = () => {
+        document.body.classList.remove('window-busy');
         bar.removeEventListener('pointermove', move);
         bar.removeEventListener('pointerup', stop);
         bar.removeEventListener('pointercancel', stop);
@@ -222,6 +226,72 @@
       bar.addEventListener('pointermove', move);
       bar.addEventListener('pointerup', stop);
       bar.addEventListener('pointercancel', stop);
+    });
+  }
+
+  // Resize by dragging any edge or corner, with the size grip drawn in the bottom-right corner.
+  // A resized window gets the class "sized" so its contents can stretch to fill it.
+  const RESIZE_EDGES = ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'];
+  const MIN_WINDOW = { w: 200, h: 140 };
+
+  function makeResizable(win) {
+    const { el } = win;
+    for (const dir of RESIZE_EDGES) {
+      const handle = document.createElement('div');
+      handle.className = 'resize-handle';
+      handle.dataset.dir = dir;
+      handle.setAttribute('aria-hidden', 'true');
+      el.append(handle);
+    }
+    const grip = document.createElement('div');
+    grip.className = 'size-grip';
+    grip.setAttribute('aria-hidden', 'true');
+    el.append(grip);
+
+    el.addEventListener('pointerdown', e => {
+      const handle = e.target.closest('.resize-handle');
+      if (!handle || e.button !== 0 || el.classList.contains('maximized') || smallScreen.matches) return;
+      e.preventDefault();
+      const dir = handle.dataset.dir;
+      const start = { x: e.clientX, y: e.clientY, left: el.offsetLeft, top: el.offsetTop, w: el.offsetWidth, h: el.offsetHeight };
+      const minW = Math.max(MIN_WINDOW.w, parseFloat(getComputedStyle(el).minWidth) || 0);
+      // Never shorter than the fixed parts (menus, toolbar, address and status bars) plus a strip of
+      // content, so nothing spills out of the window; Paint also keeps its whole tool box
+      const body = el.querySelector('.paint-body, .window-body');
+      const bodyMin = body?.classList.contains('paint-body') ? body.querySelector('.paint-tools').offsetHeight : 60;
+      const minH = Math.max(MIN_WINDOW.h, body ? el.offsetHeight - body.offsetHeight + bodyMin : 0);
+      handle.setPointerCapture(e.pointerId);
+      // Keep the arrow cursor while dragging, and stop iframes (DOOM) from swallowing the pointer
+      document.body.classList.add('window-busy');
+      document.body.style.cursor = getComputedStyle(handle).cursor;
+
+      const move = ev => {
+        let w = start.w;
+        let h = start.h;
+        if (dir.includes('e')) w = start.w + (ev.clientX - start.x);
+        if (dir.includes('w')) w = start.w - (ev.clientX - start.x);
+        if (dir.includes('s')) h = start.h + (ev.clientY - start.y);
+        if (dir.includes('n')) h = start.h - (ev.clientY - start.y);
+        // Only grow into the space on the side being dragged, so the window stays on the screen
+        const maxW = dir.includes('w') ? start.left + start.w : desktop.clientWidth - start.left;
+        const maxH = dir.includes('n') ? start.top + start.h : desktop.clientHeight - start.top;
+        w = Math.max(minW, Math.min(w, maxW));
+        h = Math.max(minH, Math.min(h, maxH));
+        const left = dir.includes('w') ? start.left + start.w - w : start.left;
+        const top = dir.includes('n') ? start.top + start.h - h : start.top;
+        Object.assign(el.style, { left: `${left}px`, top: `${top}px`, width: `${w}px`, height: `${h}px` });
+        el.classList.add('sized');
+      };
+      const stop = () => {
+        document.body.classList.remove('window-busy');
+        document.body.style.cursor = '';
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', stop);
+        handle.removeEventListener('pointercancel', stop);
+      };
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', stop);
+      handle.addEventListener('pointercancel', stop);
     });
   }
 
