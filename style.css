@@ -754,8 +754,10 @@ body.dimmed #shutdown-dialog { z-index: 9001 !important; }
 .shutdown-body { display: flex; gap: 16px; align-items: flex-start; }
 .shutdown-body img { flex: none; image-rendering: pixelated; }
 .shutdown-body p { margin: 4px 0 10px; }
-/* contain, so "Windows is shutting down." is never cropped; the sky color fills any edges */
-.shutting-down { position: fixed; inset: 0; z-index: 20000; background: #a9c9e8 url("images/shutting-down.jpg") center / contain no-repeat; cursor: wait; }
+/* Zoomed to fill the screen, anchored to the bottom so "Windows is shutting down." stays; the sides or the sky get cropped.
+   A phone held upright would lose the logo and the text, so it shows the whole picture */
+.shutting-down { position: fixed; inset: 0; z-index: 20000; background: #a9c9e8 url("images/shutting-down.jpg") center bottom / cover no-repeat; cursor: wait; }
+@media (orientation: portrait) { .shutting-down { background-position: center; background-size: contain; } }
 .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 
 .shutdown-screen {
