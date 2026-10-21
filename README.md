@@ -19,6 +19,7 @@ On phones, windows open full screen one at a time:
 
 ## Features
 
+- A BIOS boot screen with a 90s PC hum and the Windows 98 startup sound, and a real shutdown (dialog, sound, "Windows is shutting down", "It's now safe to turn off your computer"). The tray speaker mutes it all
 - Draggable windows with minimize, maximize and close, a taskbar, a Start menu and a clock
 - Quick Launch next to Start with my LinkedIn and GitHub, as hand-drawn 16x16 pixel icons
 - Every window has its own link, for example [`#projects`](https://si7li.github.io/Portfolio_Win98/#projects)
@@ -47,3 +48,5 @@ Then open http://localhost:8000. Opening `index.html` directly works too, except
 - Windows 98 icons from [alexh/vintage-icons](https://github.com/alexh/vintage-icons) (originally by Microsoft)
 - DOOM shareware v1.9 by id Software, run with [js-dos](https://github.com/caiiiycuk/js-dos) (GPL-2.0). See [`doom/README.txt`](doom/README.txt)
 - [PDF.js](https://github.com/mozilla/pdf.js) by Mozilla (Apache-2.0), in [`vendor/pdfjs`](vendor/pdfjs)
+- BIOS font: Px437 IBM VGA 9x16 from [The Ultimate Oldschool PC Font Pack](https://int10h.org/oldschool-pc-fonts/) by VileR (CC BY-SA 4.0), in [`fonts`](fonts)
+- "Windows is shutting down" screen by malekmasoud on DeviantArt; Windows 98 startup and shutdown sounds by Microsoft

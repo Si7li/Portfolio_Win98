@@ -8,7 +8,9 @@
   <link rel="icon" href="icons/windows-16.png" type="image/png">
   <!-- ?v= makes browsers fetch fresh copies: change it whenever any of the .css or .js files change,
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
-  <link rel="stylesheet" href="style.css?v=2026-10-21a">
+  <!-- The IBM VGA font for the boot screen, fetched early so the BIOS text never shows in another font first -->
+  <link rel="preload" href="fonts/Web437_IBM_VGA_9x16.woff" as="font" type="font/woff" crossorigin>
+  <link rel="stylesheet" href="style.css?v=2026-10-21g">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -582,6 +584,24 @@
     </div>
   </section>
 
+  <!-- ============ SHUT DOWN WINDOWS (Start > Shut Down...) ============ -->
+  <section class="window dialog" id="shutdown-dialog" data-title="Shut Down Windows" data-width="340" hidden>
+    <div class="window-body">
+      <div class="shutdown-body">
+        <img src="icons/shutdown.png" alt="" width="32" height="32">
+        <div>
+          <p>What do you want the computer to do?</p>
+          <label class="radio"><input type="radio" name="shutdown-choice" value="shutdown" checked><span><u>S</u>hut down</span></label>
+          <label class="radio"><input type="radio" name="shutdown-choice" value="restart"><span><u>R</u>estart</span></label>
+        </div>
+      </div>
+      <div class="button-row right">
+        <button type="button" class="button" id="shutdown-ok">OK</button>
+        <button type="button" class="button" data-close>Cancel</button>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ ABOUT THIS SITE ============ -->
   <section class="window dialog" id="about-site" data-title="System Properties" data-icon="icons/info-16.png" data-width="380" hidden>
     <div class="window-body">
@@ -635,6 +655,7 @@
   </div>
   <div class="task-list" id="task-list"></div>
   <div class="tray">
+    <button type="button" class="tray-button" id="sound-toggle" aria-pressed="true" aria-label="Sound" title="Volume: on"><img src="icons/volume-16.png" alt=""></button>
     <button type="button" class="tray-button" id="theme-toggle" data-action="theme" aria-pressed="true" aria-label="Dark mode" title="Dark mode"><img src="icons/moon-16.png" alt=""></button>
     <span id="clock"></span>
   </div>
@@ -643,8 +664,17 @@
 <!-- BIOS boot screen, played by script.js -->
 <div class="boot-screen" id="boot-screen" aria-hidden="true">
   <pre class="boot-text"></pre>
+  <!-- Only shown when the browser needs a click before it will play sound -->
+  <button type="button" class="boot-power">
+    <svg viewBox="0 0 24 24" width="56" height="56" aria-hidden="true"><path d="M12 2.5v9" stroke="currentColor" stroke-width="2.5"/><path d="M7.2 5.6a8 8 0 1 0 9.6 0" fill="none" stroke="currentColor" stroke-width="2.5"/></svg>
+    <span>Power On</span>
+    <small>Click or press any key</small>
+  </button>
   <div class="boot-footer"><span>Click or press any key to skip</span><span>06/25/98-i98-PORTFOLIO98-KS</span></div>
 </div>
+
+<!-- "Windows is shutting down" (images/shutting-down.jpg), shown while the shutdown sound plays -->
+<div class="shutting-down" id="shutting-down" role="status" hidden><span class="visually-hidden">Windows is shutting down.</span></div>
 
 <div class="shutdown-screen" id="shutdown-screen" tabindex="-1" hidden>
   <p>It's now safe to turn off<br>your computer.</p>
@@ -654,9 +684,9 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="paint.js?v=2026-10-21a"></script>
-<script src="minesweeper.js?v=2026-10-21a"></script>
-<script src="reader.js?v=2026-10-21a"></script>
-<script src="script.js?v=2026-10-21a"></script>
+<script src="paint.js?v=2026-10-21g"></script>
+<script src="minesweeper.js?v=2026-10-21g"></script>
+<script src="reader.js?v=2026-10-21g"></script>
+<script src="script.js?v=2026-10-21g"></script>
 </body>
 </html>

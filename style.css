@@ -674,6 +674,13 @@ legend { padding: 0 3px; font-weight: bold; }
 .start-menu .separator { height: 2px; margin: 3px 2px; box-shadow: inset 0 1px var(--shadow), inset 0 -1px var(--highlight); }
 
 /* ===== Boot screen (BIOS) ===== */
+/* The real IBM VGA text-mode font (fonts/README.txt). It's a 9x16 pixel font, drawn at exactly 16px
+   so every pixel stays sharp (in-between sizes would blur it). */
+@font-face {
+  font-family: "IBM VGA";
+  src: url("fonts/Web437_IBM_VGA_9x16.woff") format("woff");
+  font-display: block;
+}
 .boot-screen {
   position: fixed;
   inset: 0;
@@ -684,11 +691,18 @@ legend { padding: 0 3px; font-weight: bold; }
   padding: 24px 28px;
   background: #000;
   color: #aaa;
-  font: 16px/1.4 "Lucida Console", "Courier New", monospace;
+  font: 16px/1 "IBM VGA", "Lucida Console", "Courier New", monospace;
   cursor: default;
   transition: opacity 0.3s;
+  -webkit-font-smoothing: none;
 }
 [data-boot] .boot-screen { display: flex; }
+.boot-power { display: none; flex-direction: column; align-items: center; gap: 10px; padding: 24px; border: 0; background: none; color: #aaa; font: inherit; cursor: pointer; }
+.boot-power:hover, .boot-power:focus-visible { color: #fff; outline: none; }
+.boot-power small { color: #666; font-size: 16px; }
+.boot-screen.powered-off { justify-content: center; align-items: center; cursor: pointer; }
+.boot-screen.powered-off .boot-power { display: flex; }
+.boot-screen.powered-off .boot-text, .boot-screen.powered-off .boot-footer { display: none; }
 .boot-screen.fade { opacity: 0; }
 .boot-text { margin: 0; font: inherit; white-space: pre-wrap; }
 .boot-text::after { content: "_"; animation: blink 1s steps(1) infinite; }
@@ -697,6 +711,22 @@ legend { padding: 0 3px; font-weight: bold; }
 @keyframes blink { 50% { visibility: hidden; } }
 
 /* ===== Shut down ===== */
+/* Start > Shut Down: the screen goes checkered gray behind the "Shut Down Windows" dialog */
+body.dimmed #desktop::after, body.dimmed .taskbar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 9000;
+  background: repeating-conic-gradient(rgb(0 0 0 / 0.6) 0 25%, transparent 0 50%) 0 0 / 2px 2px;
+}
+body.dimmed #shutdown-dialog { z-index: 9001 !important; }
+.shutdown-body { display: flex; gap: 16px; align-items: flex-start; }
+.shutdown-body img { flex: none; image-rendering: pixelated; }
+.shutdown-body p { margin: 4px 0 10px; }
+/* contain, so "Windows is shutting down." is never cropped; the sky color fills any edges */
+.shutting-down { position: fixed; inset: 0; z-index: 20000; background: #a9c9e8 url("images/shutting-down.jpg") center / contain no-repeat; cursor: wait; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
 .shutdown-screen {
   position: fixed;
   inset: 0;
@@ -737,7 +767,7 @@ legend { padding: 0 3px; font-weight: bold; }
   .paint-body { flex: 1 1 auto; height: auto; }
   .window-body.reader-view { flex: 1 1 auto; height: auto; padding: 6px; }
   .reader-toolbar .tool-button span { display: none; } /* icons only on phones */
-  .boot-screen { padding: 14px; font-size: 11px; }
+  .boot-screen { padding: 14px; }
   .paint-palette { grid-template-columns: repeat(14, 1fr); flex: 1; }
   .welcome-columns { flex-direction: column; }
   .welcome-links { width: auto; flex-direction: row; flex-wrap: wrap; }

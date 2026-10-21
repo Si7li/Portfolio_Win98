@@ -137,6 +137,7 @@ window.Reader98 = (() => {
       pagesBox.querySelector('[data-act="save"]').addEventListener('click', saveCopy);
       pagesBox.querySelector('[data-act="browser"]').addEventListener('click', openInBrowser);
       statusLeft.textContent = 'Could not open the document';
+      api.playError?.();
     }
 
     function open() {

@@ -250,6 +250,7 @@
     closeWindow('msgbox');
     openWindow('msgbox');
     win.el.querySelector('[data-close]').focus();
+    playSound(makeSound('error')); // the Windows 98 ding
   }
 
   // ---------- Icons ----------
@@ -865,7 +866,8 @@
   // Each gets what it needs from the window manager and hands back its keyboard handler.
 
   function setupApps() {
-    const api = { buildMenuBar, openWindow, closeWindow, setWindowTitle, showMessage, saveAs };
+    const playError = () => playSound(makeSound('error'));
+    const api = { buildMenuBar, openWindow, closeWindow, setWindowTitle, showMessage, saveAs, playError };
     windows.forEach(win => {
       const app = win.el.dataset.app;
       if (app === 'paint' && window.Paint98) {
@@ -955,13 +957,99 @@
     }
   });
 
-  // ---------- Shut down ----------
+  // ---------- Sounds ----------
+  // The speaker in the tray mutes everything, and the choice is remembered. Browsers only allow sound
+  // after the visitor clicks or presses a key, so playing can fail; the boot screen deals with that.
 
-  document.querySelector('[data-action="shutdown"]').addEventListener('click', () => {
+  const SOUNDS = { boot: 'sounds/boot.mp3', startup: 'sounds/startup.mp3', shutdown: 'sounds/shutdown.mp3', error: 'sounds/error.mp3' };
+  const soundToggle = document.getElementById('sound-toggle');
+  const playing = new Set();
+  let soundOn = store.get('sound') !== 'off';
+
+  function makeSound(name, volume = 0.8) {
+    const audio = new Audio(SOUNDS[name]);
+    audio.preload = 'auto';
+    audio.volume = volume;
+    audio.addEventListener('ended', () => playing.delete(audio));
+    return audio;
+  }
+
+  // Resolves true if the sound started, false if it's muted or the browser blocked it
+  function playSound(audio) {
+    if (!soundOn) return Promise.resolve(false);
+    playing.add(audio);
+    return audio.play().then(() => true, () => {
+      playing.delete(audio);
+      return false;
+    });
+  }
+
+  function fadeOut(audio, ms) {
+    const from = audio.volume;
+    const start = performance.now();
+    const step = () => {
+      const t = Math.min(1, (performance.now() - start) / ms);
+      audio.volume = from * (1 - t);
+      if (t < 1 && !audio.paused) requestAnimationFrame(step);
+      else {
+        audio.pause();
+        playing.delete(audio);
+      }
+    };
+    requestAnimationFrame(step);
+  }
+
+  function applySound(on) {
+    soundOn = on;
+    soundToggle.setAttribute('aria-pressed', String(on));
+    soundToggle.title = on ? 'Volume: on' : 'Volume: muted';
+    soundToggle.querySelector('img').src = on ? 'icons/volume-16.png' : 'icons/volume-muted-16.png';
+    if (!on) {
+      playing.forEach(audio => audio.pause());
+      playing.clear();
+    }
+  }
+
+  applySound(soundOn);
+  soundToggle.addEventListener('click', () => {
+    applySound(!soundOn);
+    store.set('sound', soundOn ? 'on' : 'off');
+  });
+
+  // ---------- Shut down ----------
+  // Start > Shut Down dims the screen with that checkered gray and asks what to do, like Windows 98.
+  // Shutting down plays the sound over "Windows is shutting down", then it's safe to turn off.
+
+  const shuttingDown = document.getElementById('shutting-down');
+  const SHUTDOWN_MS = 4000; // about the length of the shutdown sound
+
+  function askShutdown() {
     closeStartMenu();
+    new Image().src = 'images/shutting-down.jpg'; // have it ready for the next step
+    document.body.classList.add('dimmed');
+    windows.get('shutdown-dialog').onClose = () => document.body.classList.remove('dimmed');
+    openWindow('shutdown-dialog');
+    document.getElementById('shutdown-ok').focus();
+  }
+
+  function shutDown(thenRestart) {
+    const sound = makeSound('shutdown');
     windows.forEach((_, id) => closeWindow(id));
-    shutdownScreen.hidden = false;
-    shutdownScreen.focus();
+    shuttingDown.hidden = false;
+    playSound(sound);
+    setTimeout(() => {
+      shuttingDown.hidden = true;
+      if (thenRestart) boot(() => openWindow('welcome'));
+      else {
+        shutdownScreen.hidden = false;
+        shutdownScreen.focus();
+      }
+    }, SHUTDOWN_MS);
+  }
+
+  document.querySelector('[data-action="shutdown"]').addEventListener('click', askShutdown);
+  document.getElementById('shutdown-ok').addEventListener('click', () => {
+    shutDown(document.querySelector('input[name="shutdown-choice"]:checked')?.value === 'restart');
   });
 
   const restart = () => {
@@ -1149,19 +1237,24 @@
   showWelcome.addEventListener('change', () => store.set('hideWelcome', showWelcome.checked ? '0' : '1'));
 
   // ---------- Boot screen ----------
-  // A short BIOS power-on screen, like a 1998 PC. The script in <head> decides whether to show it
-  // (data-boot on <html>); Shut Down > restart always shows it. Any key or click skips it.
+  // A short BIOS power-on screen, like a 1998 PC, with its fan-and-disk hum fading away and the
+  // Windows 98 startup sound when the desktop appears. The script in <head> decides whether to show
+  // it (data-boot on <html>); Shut Down > restart always shows it. Any key or click skips it.
+  // If sound is on but the browser won't play it yet, a Power On button comes first: that click is
+  // what lets the sound play.
 
   const bootScreen = document.getElementById('boot-screen');
   const bootText = bootScreen.querySelector('.boot-text');
+  const powerButton = bootScreen.querySelector('.boot-power');
   const BOOT_MEMORY_KB = 65536;
 
   function boot(done) {
     const root = document.documentElement;
     root.dataset.boot = '';
     bootText.textContent = '';
-    bootScreen.classList.remove('fade');
+    bootScreen.classList.remove('fade', 'powered-off');
     const timers = [];
+    let started = false;
     let finished = false;
     const later = (ms, fn) => timers.push(setTimeout(fn, ms));
     const print = (line = '', cls) => {
@@ -1171,6 +1264,8 @@
       bootText.append(span);
       return span;
     };
+    const hum = makeSound('boot', 0.6);
+    const chime = makeSound('startup', 0.8);
 
     function finish() {
       if (finished) return;
@@ -1179,60 +1274,104 @@
       document.removeEventListener('keydown', finish, true);
       bootScreen.removeEventListener('pointerdown', finish);
       try { sessionStorage.setItem('booted', '1'); } catch { /* storage blocked */ }
+      if (!hum.paused) fadeOut(hum, 300);
       bootScreen.classList.add('fade');
       setTimeout(() => {
         delete root.dataset.boot;
+        playSound(chime);
         done?.();
       }, 300);
     }
 
-    print('KS BIOS v1.98, (C) 1998-2026 Khalil Sahli', 'boot-bright');
-    print('PORTFOLIO98 Main Board, Revision 2.0');
-    print();
-    later(250, () => print('Main Processor : 80686 Neural Unit @ 266 MHz'));
-    later(450, () => {
-      const line = print('Memory Testing : 0K');
-      const start = performance.now();
-      const count = () => {
-        if (finished) return;
-        const kb = Math.min(BOOT_MEMORY_KB, Math.round(((performance.now() - start) / 800) * BOOT_MEMORY_KB / 1024) * 1024);
-        line.textContent = `Memory Testing : ${kb}K${kb === BOOT_MEMORY_KB ? ' OK' : ''}\n`;
-        if (kb < BOOT_MEMORY_KB) requestAnimationFrame(count);
-      };
-      requestAnimationFrame(count);
-    });
-    const drives = [
-      ['Primary Master  ', 'PORTFOLIO98 HDD 2.1GB'],
-      ['Primary Slave   ', 'None'],
-      ['Secondary Master', 'ATAPI CD-ROM 24X'],
-      ['Secondary Slave ', 'None'],
-    ];
-    later(1350, () => print());
-    drives.forEach(([slot, device], i) => later(1400 + i * 220, () => print(`Detecting IDE ${slot} ... ${device}`)));
-    later(2500, () => {
-      bootText.textContent = '';
-      const line = print('Verifying DMI Pool Data ');
-      let dots = 0;
-      const tick = () => {
-        if (finished) return;
-        dots++;
-        line.textContent = `Verifying DMI Pool Data ${'.'.repeat(dots)}\n`;
-        if (dots < 8) timers.push(setTimeout(tick, 50));
-      };
-      tick();
-    });
-    later(3000, () => {
+    function run() {
+      if (started) return;
+      started = true;
+      // Narrow screens get shorter lines (like 40-column text mode) so nothing wraps.
+      // The VGA font is 9 x 16, so a character is 9/16 of the font size wide.
+      const charWidth = (parseFloat(getComputedStyle(bootScreen).fontSize) * 9) / 16;
+      const compact = bootText.clientWidth / charWidth < 57;
+      const memoryLabel = compact ? 'Memory : ' : 'Memory Testing : ';
+      print(compact ? 'KS BIOS v1.98 (C)1998-2026 Khalil Sahli' : 'KS BIOS v1.98, (C) 1998-2026 Khalil Sahli', 'boot-bright');
+      print(compact ? 'PORTFOLIO98 Main Board, Rev 2.0' : 'PORTFOLIO98 Main Board, Revision 2.0');
       print();
-      print('Starting Windows 98...', 'boot-bright');
-    });
-    later(3700, finish);
+      later(250, () => print(compact ? 'CPU    : 80686 Neural Unit 266MHz' : 'Main Processor : 80686 Neural Unit @ 266 MHz'));
+      later(450, () => {
+        const line = print(`${memoryLabel}0K`);
+        const start = performance.now();
+        const count = () => {
+          if (finished) return;
+          const kb = Math.min(BOOT_MEMORY_KB, Math.round(((performance.now() - start) / 800) * BOOT_MEMORY_KB / 1024) * 1024);
+          line.textContent = `${memoryLabel}${kb}K${kb === BOOT_MEMORY_KB ? ' OK' : ''}\n`;
+          if (kb < BOOT_MEMORY_KB) requestAnimationFrame(count);
+        };
+        requestAnimationFrame(count);
+      });
+      const drives = [
+        ['Primary Master  ', 'Pri Master', 'PORTFOLIO98 HDD 2.1GB'],
+        ['Primary Slave   ', 'Pri Slave ', 'None'],
+        ['Secondary Master', 'Sec Master', 'ATAPI CD-ROM 24X'],
+        ['Secondary Slave ', 'Sec Slave ', 'None'],
+      ];
+      later(1350, () => print());
+      drives.forEach(([slot, short, device], i) => later(1400 + i * 220, () =>
+        print(compact ? `${short} : ${device}` : `Detecting IDE ${slot} ... ${device}`)));
+      later(2500, () => {
+        bootText.textContent = '';
+        const line = print('Verifying DMI Pool Data ');
+        let dots = 0;
+        const tick = () => {
+          if (finished) return;
+          dots++;
+          line.textContent = `Verifying DMI Pool Data ${'.'.repeat(dots)}\n`;
+          if (dots < 8) timers.push(setTimeout(tick, 50));
+        };
+        tick();
+      });
+      later(2800, () => { if (!hum.paused) fadeOut(hum, 1000); });
+      later(3000, () => {
+        print();
+        print('Starting Windows 98...', 'boot-bright');
+      });
+      later(3700, finish);
 
-    // Skip with any key or click; wait a moment so the key or click that started a restart doesn't count
-    setTimeout(() => {
-      if (finished) return;
-      document.addEventListener('keydown', finish, true);
-      bootScreen.addEventListener('pointerdown', finish);
-    }, 150);
+      // Skip with any key or click; wait a moment so the key or click that started it doesn't count
+      later(150, () => {
+        document.addEventListener('keydown', finish, true);
+        bootScreen.addEventListener('pointerdown', finish);
+      });
+    }
+
+    function askForPower() {
+      bootScreen.classList.add('powered-off');
+      bootScreen.removeAttribute('aria-hidden');
+      powerButton.focus();
+      const powerOn = e => {
+        e.preventDefault();
+        document.removeEventListener('keydown', powerOn, true);
+        bootScreen.removeEventListener('pointerdown', powerOn);
+        bootScreen.classList.remove('powered-off');
+        bootScreen.setAttribute('aria-hidden', 'true');
+        playSound(hum);
+        run();
+      };
+      document.addEventListener('keydown', powerOn, true);
+      bootScreen.addEventListener('pointerdown', powerOn);
+    }
+
+    if (!soundOn) return run();
+    // A blocked sound fails right away; one that's merely still loading was allowed, so go ahead
+    let decided = false;
+    playSound(hum).then(ok => {
+      if (decided) return;
+      decided = true;
+      if (ok) run();
+      else askForPower();
+    });
+    later(400, () => {
+      if (decided) return;
+      decided = true;
+      run();
+    });
   }
 
   // ---------- Start up ----------
