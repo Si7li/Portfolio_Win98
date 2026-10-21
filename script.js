@@ -966,7 +966,7 @@
 
   const restart = () => {
     shutdownScreen.hidden = true;
-    openWindow('welcome');
+    boot(() => openWindow('welcome'));
   };
   shutdownScreen.addEventListener('click', restart);
   shutdownScreen.addEventListener('keydown', restart);
@@ -1148,6 +1148,93 @@
   showWelcome.checked = store.get('hideWelcome') !== '1';
   showWelcome.addEventListener('change', () => store.set('hideWelcome', showWelcome.checked ? '0' : '1'));
 
+  // ---------- Boot screen ----------
+  // A short BIOS power-on screen, like a 1998 PC. The script in <head> decides whether to show it
+  // (data-boot on <html>); Shut Down > restart always shows it. Any key or click skips it.
+
+  const bootScreen = document.getElementById('boot-screen');
+  const bootText = bootScreen.querySelector('.boot-text');
+  const BOOT_MEMORY_KB = 65536;
+
+  function boot(done) {
+    const root = document.documentElement;
+    root.dataset.boot = '';
+    bootText.textContent = '';
+    bootScreen.classList.remove('fade');
+    const timers = [];
+    let finished = false;
+    const later = (ms, fn) => timers.push(setTimeout(fn, ms));
+    const print = (line = '', cls) => {
+      const span = document.createElement('span');
+      if (cls) span.className = cls;
+      span.textContent = `${line}\n`;
+      bootText.append(span);
+      return span;
+    };
+
+    function finish() {
+      if (finished) return;
+      finished = true;
+      timers.forEach(clearTimeout);
+      document.removeEventListener('keydown', finish, true);
+      bootScreen.removeEventListener('pointerdown', finish);
+      try { sessionStorage.setItem('booted', '1'); } catch { /* storage blocked */ }
+      bootScreen.classList.add('fade');
+      setTimeout(() => {
+        delete root.dataset.boot;
+        done?.();
+      }, 300);
+    }
+
+    print('KS BIOS v1.98, (C) 1998-2026 Khalil Sahli', 'boot-bright');
+    print('PORTFOLIO98 Main Board, Revision 2.0');
+    print();
+    later(250, () => print('Main Processor : 80686 Neural Unit @ 266 MHz'));
+    later(450, () => {
+      const line = print('Memory Testing : 0K');
+      const start = performance.now();
+      const count = () => {
+        if (finished) return;
+        const kb = Math.min(BOOT_MEMORY_KB, Math.round(((performance.now() - start) / 800) * BOOT_MEMORY_KB / 1024) * 1024);
+        line.textContent = `Memory Testing : ${kb}K${kb === BOOT_MEMORY_KB ? ' OK' : ''}\n`;
+        if (kb < BOOT_MEMORY_KB) requestAnimationFrame(count);
+      };
+      requestAnimationFrame(count);
+    });
+    const drives = [
+      ['Primary Master  ', 'PORTFOLIO98 HDD 2.1GB'],
+      ['Primary Slave   ', 'None'],
+      ['Secondary Master', 'ATAPI CD-ROM 24X'],
+      ['Secondary Slave ', 'None'],
+    ];
+    later(1350, () => print());
+    drives.forEach(([slot, device], i) => later(1400 + i * 220, () => print(`Detecting IDE ${slot} ... ${device}`)));
+    later(2500, () => {
+      bootText.textContent = '';
+      const line = print('Verifying DMI Pool Data ');
+      let dots = 0;
+      const tick = () => {
+        if (finished) return;
+        dots++;
+        line.textContent = `Verifying DMI Pool Data ${'.'.repeat(dots)}\n`;
+        if (dots < 8) timers.push(setTimeout(tick, 50));
+      };
+      tick();
+    });
+    later(3000, () => {
+      print();
+      print('Starting Windows 98...', 'boot-bright');
+    });
+    later(3700, finish);
+
+    // Skip with any key or click; wait a moment so the key or click that started a restart doesn't count
+    setTimeout(() => {
+      if (finished) return;
+      document.addEventListener('keydown', finish, true);
+      bootScreen.addEventListener('pointerdown', finish);
+    }, 150);
+  }
+
   // ---------- Start up ----------
 
   document.querySelectorAll('.window').forEach(buildWindow);
@@ -1156,6 +1243,10 @@
   setupApps();
 
   const linked = location.hash.slice(1);
-  if (windows.has(linked)) openWindow(linked);
-  else if (store.get('hideWelcome') !== '1') openWindow('welcome');
+  const showDesktop = () => {
+    if (windows.has(linked)) openWindow(linked);
+    else if (store.get('hideWelcome') !== '1') openWindow('welcome');
+  };
+  if ('boot' in document.documentElement.dataset) boot(showDesktop);
+  else showDesktop();
 })();

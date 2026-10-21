@@ -673,6 +673,29 @@ legend { padding: 0 3px; font-weight: bold; }
 .start-menu li > a:focus-visible, .start-menu li > button:focus-visible { background: var(--navy); color: #fff; outline: none; }
 .start-menu .separator { height: 2px; margin: 3px 2px; box-shadow: inset 0 1px var(--shadow), inset 0 -1px var(--highlight); }
 
+/* ===== Boot screen (BIOS) ===== */
+.boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 24px 28px;
+  background: #000;
+  color: #aaa;
+  font: 16px/1.4 "Lucida Console", "Courier New", monospace;
+  cursor: default;
+  transition: opacity 0.3s;
+}
+[data-boot] .boot-screen { display: flex; }
+.boot-screen.fade { opacity: 0; }
+.boot-text { margin: 0; font: inherit; white-space: pre-wrap; }
+.boot-text::after { content: "_"; animation: blink 1s steps(1) infinite; }
+.boot-bright { color: #fff; }
+.boot-footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; }
+@keyframes blink { 50% { visibility: hidden; } }
+
 /* ===== Shut down ===== */
 .shutdown-screen {
   position: fixed;
@@ -714,6 +737,7 @@ legend { padding: 0 3px; font-weight: bold; }
   .paint-body { flex: 1 1 auto; height: auto; }
   .window-body.reader-view { flex: 1 1 auto; height: auto; padding: 6px; }
   .reader-toolbar .tool-button span { display: none; } /* icons only on phones */
+  .boot-screen { padding: 14px; font-size: 11px; }
   .paint-palette { grid-template-columns: repeat(14, 1fr); flex: 1; }
   .welcome-columns { flex-direction: column; }
   .welcome-links { width: auto; flex-direction: row; flex-wrap: wrap; }

@@ -8,10 +8,17 @@
   <link rel="icon" href="icons/windows-16.png" type="image/png">
   <!-- ?v= makes browsers fetch fresh copies: change it whenever any of the .css or .js files change,
        otherwise a visitor can get the new page with the old script for up to 10 minutes after a push -->
-  <link rel="stylesheet" href="style.css?v=2026-10-20c">
+  <link rel="stylesheet" href="style.css?v=2026-10-21a">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
+    // Show the BIOS boot screen (see "Boot screen" in script.js) once per visit, but not for direct links
+    // like #resume or for people who prefer reduced motion. Deciding here avoids a flash of the desktop.
+    try {
+      if (!location.hash && !sessionStorage.getItem('booted') && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.documentElement.dataset.boot = '';
+      }
+    } catch { /* storage blocked: skip the boot screen */ }
   </script>
   <noscript>
     <style>
@@ -633,6 +640,12 @@
   </div>
 </footer>
 
+<!-- BIOS boot screen, played by script.js -->
+<div class="boot-screen" id="boot-screen" aria-hidden="true">
+  <pre class="boot-text"></pre>
+  <div class="boot-footer"><span>Click or press any key to skip</span><span>06/25/98-i98-PORTFOLIO98-KS</span></div>
+</div>
+
 <div class="shutdown-screen" id="shutdown-screen" tabindex="-1" hidden>
   <p>It's now safe to turn off<br>your computer.</p>
   <small>Click anywhere or press a key to restart</small>
@@ -641,9 +654,9 @@
 <!-- Suggestions for the explorer address bars, filled in by script.js -->
 <datalist id="explorer-paths"></datalist>
 
-<script src="paint.js?v=2026-10-20c"></script>
-<script src="minesweeper.js?v=2026-10-20c"></script>
-<script src="reader.js?v=2026-10-20c"></script>
-<script src="script.js?v=2026-10-20c"></script>
+<script src="paint.js?v=2026-10-21a"></script>
+<script src="minesweeper.js?v=2026-10-21a"></script>
+<script src="reader.js?v=2026-10-21a"></script>
+<script src="script.js?v=2026-10-21a"></script>
 </body>
 </html>
