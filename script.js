@@ -1248,7 +1248,9 @@
   // If that fails, data/github.json (made by scripts/update_data.py) is used, and failing that,
   // the text already in the page stays. Keep the filtering below in sync with that script.
   const GITHUB_USER = 'Si7li';
-  const SITE_REPO = 'Portfolio_Win98';
+  // This site's repo (a user site, so it's named after the account) and the profile README repo aren't projects
+  const SITE_REPO = `${GITHUB_USER}.github.io`.toLowerCase();
+  const isProject = r => ![SITE_REPO, GITHUB_USER.toLowerCase()].includes(r.name.toLowerCase());
 
   const getJson = url => fetch(url).then(res => (res.ok ? res.json() : Promise.reject(new Error(`HTTP ${res.status}`))));
   const getText = url => fetch(url).then(res => (res.ok ? res.text() : Promise.reject(new Error(`HTTP ${res.status}`))));
@@ -1275,11 +1277,11 @@
       getJson(`https://api.github.com/users/${GITHUB_USER}/repos?type=owner&sort=pushed&per_page=100`),
       getText(`https://raw.githubusercontent.com/${GITHUB_USER}/GyozaOS/HEAD/README.md`).catch(() => ''),
     ]);
-    const site = repos.find(r => r.name === SITE_REPO);
+    const site = repos.find(r => r.name.toLowerCase() === SITE_REPO);
     return {
       updated: site?.pushed_at.slice(0, 10),
       repos: repos
-        .filter(r => !r.fork && !r.archived && r.name !== SITE_REPO && r.name !== GITHUB_USER)
+        .filter(r => !r.fork && !r.archived && isProject(r))
         .slice(0, 6)
         .map(r => ({ name: r.name, url: r.html_url, description: r.description || '', language: r.language || '', pushed: r.pushed_at.slice(0, 10) })),
       gyozaos: parseMilestones(readme),

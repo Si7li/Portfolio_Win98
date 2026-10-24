@@ -2,7 +2,7 @@
 
 My personal portfolio, built as a Windows 98 desktop. Projects, experience, studies and my resume open as draggable windows, and DOOM is playable from the desktop.
 
-**Live:** https://si7li.github.io/Portfolio_Win98/
+**Live:** https://si7li.github.io/
 
 ![Desktop with the welcome screen](screenshots/01-desktop-welcome.png)
 
@@ -22,7 +22,7 @@ On phones, windows open full screen one at a time:
 - A BIOS boot screen with a 90s PC hum and the Windows 98 startup sound, and a real shutdown (dialog, sound, "Windows is shutting down", "It's now safe to turn off your computer"). The tray speaker mutes it all
 - Draggable windows with minimize, maximize and close, a taskbar, a Start menu and a clock
 - Quick Launch next to Start with my LinkedIn and GitHub, as hand-drawn 16x16 pixel icons
-- Every window has its own link, for example [`#projects`](https://si7li.github.io/Portfolio_Win98/#projects)
+- Every window has its own link, for example [`#projects`](https://si7li.github.io/#projects)
 - A working Explorer: type a path like `C:\Desktop\My Projects` in the address bar, go Back / Forward / Up, and use real File, Edit, View and Help menus (keyboard too: Alt+letter, arrows, Esc)
 - Notepad menus that work: Save As downloads the text, Copy, Select All, Word Wrap, Find / Find Next
 - A working copy of Windows 98 Paint ([`paint.js`](paint.js)): all 16 tools, the options box, left/right-click colors, Undo, Cut/Copy/Paste, Flip/Rotate/Invert, Attributes, and New/Open/Save As. Open `Khalil.jpg` on the desktop to doodle on my photo

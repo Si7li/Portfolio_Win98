@@ -17,8 +17,9 @@ from pathlib import Path
 USER = os.environ.get('GITHUB_USER', 'Si7li')
 OUT = Path(__file__).resolve().parent.parent / 'data' / 'github.json'
 RECENT_COUNT = 6
-# Repos that aren't projects: this site and the profile README
-SKIP = {'Portfolio_Win98', USER}
+# Repos that aren't projects: this site (a user site, named after the account) and the profile README
+SITE_REPO = f'{USER}.github.io'.lower()
+SKIP = {SITE_REPO, USER.lower()}
 
 
 def get(url, accept='application/vnd.github+json'):
@@ -35,11 +36,11 @@ def fetch_repos():
 
 
 def site_pushed(repos):
-    return next((r['pushed_at'][:10] for r in repos if r['name'] == 'Portfolio_Win98'), None)
+    return next((r['pushed_at'][:10] for r in repos if r['name'].lower() == SITE_REPO), None)
 
 
 def recent_repos(repos):
-    picked = [r for r in repos if not r['fork'] and not r['archived'] and r['name'] not in SKIP]
+    picked = [r for r in repos if not r['fork'] and not r['archived'] and r['name'].lower() not in SKIP]
     return [{
         'name': r['name'],
         'url': r['html_url'],

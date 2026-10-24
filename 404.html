@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Page not found - Portfolio 98</title>
-  <link rel="icon" href="/Portfolio_Win98/icons/windows-16.png" type="image/png">
-  <link rel="stylesheet" href="/Portfolio_Win98/style.css?v=2026-10-21k">
+  <link rel="icon" href="/icons/windows-16.png" type="image/png">
+  <link rel="stylesheet" href="/style.css?v=2026-10-24a">
   <script>
     // Apply a saved theme before the page draws. Dark is the default (see data-theme above).
     try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch { /* storage blocked */ }
@@ -18,22 +18,22 @@
   </style>
 </head>
 <body>
-  <!-- GitHub Pages shows this page for any address that doesn't exist. Paths start with /Portfolio_Win98/ (the repo name) so they work at any depth. -->
+  <!-- GitHub Pages shows this page for any address that doesn't exist. Paths start with / (the site root) so they work at any depth. -->
   <div class="window active" role="alertdialog" aria-labelledby="error-title">
     <div class="title-bar">
       <span class="title-text" id="error-title">404.EXE</span>
-      <div class="title-controls"><a class="tb-close" href="/Portfolio_Win98/" aria-label="Close" style="display:block;width:16px;height:14px;background-color:var(--face);background-repeat:no-repeat;background-position:center;box-shadow:var(--button)"></a></div>
+      <div class="title-controls"><a class="tb-close" href="/" aria-label="Close" style="display:block;width:16px;height:14px;background-color:var(--face);background-repeat:no-repeat;background-position:center;box-shadow:var(--button)"></a></div>
     </div>
     <div class="window-body">
       <div class="error">
-        <img src="/Portfolio_Win98/icons/error.png" alt="" width="32" height="32">
+        <img src="/icons/error.png" alt="" width="32" height="32">
         <div>
           <p>This page has performed an illegal operation and could not be found.</p>
           <p class="muted">Error 404: the file may have been moved, renamed, or sent to the Recycle Bin.</p>
         </div>
       </div>
       <div class="button-row right">
-        <a class="button" href="/Portfolio_Win98/">Go to desktop</a>
+        <a class="button" href="/">Go to desktop</a>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
     // The Windows 98 error ding, unless sound is muted in the tray (some browsers block it until a click)
     try {
       if (localStorage.getItem('sound') !== 'off') {
-        const ding = new Audio('/Portfolio_Win98/sounds/error.mp3');
+        const ding = new Audio('/sounds/error.mp3');
         ding.volume = 0.8;
         ding.play().catch(() => { /* blocked until the visitor interacts */ });
       }
